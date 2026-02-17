@@ -1,0 +1,1647 @@
+{
+  "apiInfo": {
+    "title": "Formation Management API",
+    "description": "Complete API documentation for the Formation (Training) Management System",
+    "baseUrl": "http://localhost:8080",
+    "version": "1.0",
+    "authentication": "None - All endpoints are public",
+    "lastUpdated": "2026-02-06"
+  },
+  "endpoints": [
+    {
+      "category": "Formations",
+      "basePath": "/api/formations",
+      "description": "Main formation management endpoints",
+      "routes": [
+        {
+          "method": "GET",
+          "path": "/api/formations/statistics",
+          "description": "Obtenir les statistiques des formations - Returns complete statistics on formations, participants, certifications, etc.",
+          "authentication": "public",
+          "response": "FormationStatisticsResponse"
+        },
+        {
+          "method": "GET",
+          "path": "/api/formations",
+          "description": "Obtenir la liste des formations - Returns all available formations in the system",
+          "authentication": "public",
+          "response": "List<GetFormationResponse>"
+        },
+        {
+          "method": "GET",
+          "path": "/api/formations/paginated",
+          "description": "Obtenir la liste paginée des formations - Returns a paginated page of formations with sorting",
+          "authentication": "public",
+          "queryParams": [
+            {
+              "name": "page",
+              "type": "int",
+              "default": "0",
+              "description": "Page number"
+            },
+            {
+              "name": "size",
+              "type": "int",
+              "default": "10",
+              "description": "Page size"
+            },
+            {
+              "name": "sortBy",
+              "type": "string",
+              "default": "idFormation",
+              "description": "Sort field"
+            },
+            {
+              "name": "sortDirection",
+              "type": "string",
+              "default": "ASC",
+              "description": "Sort direction (ASC/DESC)"
+            }
+          ],
+          "response": "PagedFormationResponse"
+        },
+        {
+          "method": "GET",
+          "path": "/api/formations/{id}",
+          "description": "Obtenir une formation par ID - Returns details of a specific formation",
+          "authentication": "public",
+          "pathParams": [
+            {
+              "name": "id",
+              "type": "Long",
+              "description": "Formation ID"
+            }
+          ],
+          "response": "List<GetFormationResponse>"
+        },
+        {
+          "method": "POST",
+          "path": "/api/formations",
+          "description": "Créer une nouvelle formation - Adds a new formation with its information and relations",
+          "authentication": "public",
+          "requestBody": "AddFormationCommand",
+          "response": "Object"
+        },
+        {
+          "method": "PUT",
+          "path": "/api/formations/{id}",
+          "description": "Mettre à jour une formation - Modifies information of an existing formation",
+          "authentication": "public",
+          "pathParams": [
+            {
+              "name": "id",
+              "type": "Long",
+              "description": "Formation ID"
+            }
+          ],
+          "requestBody": "UpdateFormationCommand",
+          "response": "void (202 Accepted)"
+        },
+        {
+          "method": "DELETE",
+          "path": "/api/formations/{id}",
+          "description": "Supprimer une formation - Deletes an existing formation from database",
+          "authentication": "public",
+          "pathParams": [
+            {
+              "name": "id",
+              "type": "Long",
+              "description": "Formation ID"
+            }
+          ],
+          "response": "void (204 No Content)"
+        },
+        {
+          "method": "POST",
+          "path": "/api/formations/{id}/duplicate",
+          "description": "Dupliquer une formation - Creates a complete copy of a formation with all its global objectives, specific objectives, and detailed contents",
+          "authentication": "public",
+          "pathParams": [
+            {
+              "name": "id",
+              "type": "Long",
+              "description": "Formation ID to duplicate"
+            }
+          ],
+          "response": "Object (201 Created)"
+        },
+        {
+          "method": "POST",
+          "path": "/api/formations/{formationId}/link-objectif-global/{objectifGlobalId}",
+          "description": "Lier un objectif global à une formation - Links a global objective to a formation",
+          "authentication": "public",
+          "pathParams": [
+            {
+              "name": "formationId",
+              "type": "Long",
+              "description": "Formation ID"
+            },
+            {
+              "name": "objectifGlobalId",
+              "type": "Long",
+              "description": "Global Objective ID"
+            }
+          ],
+          "response": "void (200 OK)"
+        },
+        {
+          "method": "DELETE",
+          "path": "/api/formations/{formationId}/unlink-objectif-global/{objectifGlobalId}",
+          "description": "Délier un objectif global d'une formation - Unlinks a global objective from a formation",
+          "authentication": "public",
+          "pathParams": [
+            {
+              "name": "formationId",
+              "type": "Long",
+              "description": "Formation ID"
+            },
+            {
+              "name": "objectifGlobalId",
+              "type": "Long",
+              "description": "Global Objective ID"
+            }
+          ],
+          "response": "void (204 No Content)"
+        },
+        {
+          "method": "POST",
+          "path": "/api/formations/{formationId}/link-objectif-specifique/{objectifSpecifiqueId}",
+          "description": "Lier un objectif spécifique à une formation - Links a specific objective to a formation",
+          "authentication": "public",
+          "pathParams": [
+            {
+              "name": "formationId",
+              "type": "Long",
+              "description": "Formation ID"
+            },
+            {
+              "name": "objectifSpecifiqueId",
+              "type": "Long",
+              "description": "Specific Objective ID"
+            }
+          ],
+          "response": "void (200 OK)"
+        },
+        {
+          "method": "DELETE",
+          "path": "/api/formations/{formationId}/unlink-objectif-specifique/{objectifSpecifiqueId}",
+          "description": "Délier un objectif spécifique d'une formation - Unlinks a specific objective from a formation",
+          "authentication": "public",
+          "pathParams": [
+            {
+              "name": "formationId",
+              "type": "Long",
+              "description": "Formation ID"
+            },
+            {
+              "name": "objectifSpecifiqueId",
+              "type": "Long",
+              "description": "Specific Objective ID"
+            }
+          ],
+          "response": "void (204 No Content)"
+        }
+      ]
+    },
+    {
+      "category": "Plan Formations",
+      "basePath": "/api/planformations",
+      "description": "Training plan management endpoints",
+      "routes": [
+        {
+          "method": "GET",
+          "path": "/api/planformations",
+          "description": "Obtenir la liste des plans de formation - Returns complete list of training plans",
+          "authentication": "public",
+          "response": "List<GetPlanFormationResponse>"
+        },
+        {
+          "method": "GET",
+          "path": "/api/planformations/{id}",
+          "description": "Obtenir un plan de formation par ID - Returns details of a specific training plan",
+          "authentication": "public",
+          "pathParams": [
+            {
+              "name": "id",
+              "type": "Long",
+              "description": "Plan Formation ID"
+            }
+          ],
+          "response": "List<GetPlanFormationResponse>"
+        },
+        {
+          "method": "POST",
+          "path": "/api/planformations",
+          "description": "Créer un plan de formation - Adds a new training plan with its information",
+          "authentication": "public",
+          "requestBody": "AddPlanFormationCommand",
+          "response": "Object (201 Created)"
+        },
+        {
+          "method": "PUT",
+          "path": "/api/planformations/{id}",
+          "description": "Mettre à jour un plan de formation - Modifies information of an existing plan",
+          "authentication": "public",
+          "pathParams": [
+            {
+              "name": "id",
+              "type": "Long",
+              "description": "Plan Formation ID"
+            }
+          ],
+          "requestBody": "UpdatePlanFormationCommand",
+          "response": "void (202 Accepted)"
+        },
+        {
+          "method": "DELETE",
+          "path": "/api/planformations/{id}",
+          "description": "Supprimer un plan de formation - Deletes a training plan from database",
+          "authentication": "public",
+          "pathParams": [
+            {
+              "name": "id",
+              "type": "Long",
+              "description": "Plan Formation ID"
+            }
+          ],
+          "response": "void (204 No Content)"
+        },
+        {
+          "method": "GET",
+          "path": "/api/planformations/formation/{idFormation}",
+          "description": "Obtenir les plans d'une formation spécifique - Returns all plans linked to a given formation",
+          "authentication": "public",
+          "pathParams": [
+            {
+              "name": "idFormation",
+              "type": "Long",
+              "description": "Formation ID"
+            }
+          ],
+          "response": "List<GetPlansByFormationResponse>"
+        }
+      ]
+    },
+    {
+      "category": "Objectifs Globaux",
+      "basePath": "/api/objectifsglobaux",
+      "description": "Global objectives management",
+      "routes": [
+        {
+          "method": "GET",
+          "path": "/api/objectifsglobaux",
+          "description": "Get all global objectives",
+          "authentication": "public",
+          "response": "List<GetObjectifGlobalResponse>"
+        },
+        {
+          "method": "GET",
+          "path": "/api/objectifsglobaux/{id}",
+          "description": "Get global objective by ID",
+          "authentication": "public",
+          "pathParams": [
+            {
+              "name": "id",
+              "type": "Long"
+            }
+          ],
+          "response": "GetObjectifGlobalResponse"
+        },
+        {
+          "method": "GET",
+          "path": "/api/objectifsglobaux/formation/{idFormation}",
+          "description": "Get global objectives by formation ID",
+          "authentication": "public",
+          "pathParams": [
+            {
+              "name": "idFormation",
+              "type": "Long"
+            }
+          ],
+          "response": "List<GetObjectifGlobalResponse>"
+        },
+        {
+          "method": "GET",
+          "path": "/api/objectifsglobaux/search",
+          "description": "Search global objectives by description",
+          "authentication": "public",
+          "queryParams": [
+            {
+              "name": "description",
+              "type": "string"
+            }
+          ],
+          "response": "List<GetObjectifGlobalResponse>"
+        },
+        {
+          "method": "GET",
+          "path": "/api/objectifsglobaux/not-linked/{formationId}",
+          "description": "Get global objectives not linked to a formation",
+          "authentication": "public",
+          "pathParams": [
+            {
+              "name": "formationId",
+              "type": "Long"
+            }
+          ],
+          "response": "List<GetObjectifGlobalResponse>"
+        },
+        {
+          "method": "GET",
+          "path": "/api/objectifsglobaux/search-not-linked/{formationId}",
+          "description": "Search global objectives not linked to formation by description",
+          "authentication": "public",
+          "pathParams": [
+            {
+              "name": "formationId",
+              "type": "Long"
+            }
+          ],
+          "queryParams": [
+            {
+              "name": "description",
+              "type": "string"
+            }
+          ],
+          "response": "List<GetObjectifGlobalResponse>"
+        },
+        {
+          "method": "POST",
+          "path": "/api/objectifsglobaux",
+          "description": "Create new global objective",
+          "authentication": "public",
+          "requestBody": "AddObjectifGlobalCommand",
+          "response": "Object (201 Created)"
+        },
+        {
+          "method": "PUT",
+          "path": "/api/objectifsglobaux/{id}",
+          "description": "Update global objective",
+          "authentication": "public",
+          "pathParams": [
+            {
+              "name": "id",
+              "type": "Long"
+            }
+          ],
+          "requestBody": "UpdateObjectifGlobalCommand",
+          "response": "void (202 Accepted)"
+        },
+        {
+          "method": "DELETE",
+          "path": "/api/objectifsglobaux/{id}",
+          "description": "Delete global objective",
+          "authentication": "public",
+          "pathParams": [
+            {
+              "name": "id",
+              "type": "Long"
+            }
+          ],
+          "response": "void (204 No Content)"
+        }
+      ]
+    },
+    {
+      "category": "Objectifs Spécifiques",
+      "basePath": "/api/objectifsspecifiques",
+      "description": "Specific objectives management",
+      "routes": [
+        {
+          "method": "GET",
+          "path": "/api/objectifsspecifiques",
+          "description": "Get all specific objectives",
+          "authentication": "public",
+          "response": "List<GetObjectifSpecifiqueResponse>"
+        },
+        {
+          "method": "GET",
+          "path": "/api/objectifsspecifiques/{id}",
+          "description": "Get specific objective by ID",
+          "authentication": "public",
+          "pathParams": [
+            {
+              "name": "id",
+              "type": "Long"
+            }
+          ],
+          "response": "GetObjectifSpecifiqueResponse"
+        },
+        {
+          "method": "POST",
+          "path": "/api/objectifsspecifiques",
+          "description": "Create new specific objective",
+          "authentication": "public",
+          "requestBody": "AddObjectifSpecifiqueCommand",
+          "response": "Object (201 Created)"
+        },
+        {
+          "method": "PUT",
+          "path": "/api/objectifsspecifiques/{id}",
+          "description": "Update specific objective",
+          "authentication": "public",
+          "pathParams": [
+            {
+              "name": "id",
+              "type": "Long"
+            }
+          ],
+          "requestBody": "UpdateObjectifSpecifiqueCommand",
+          "response": "void (202 Accepted)"
+        },
+        {
+          "method": "DELETE",
+          "path": "/api/objectifsspecifiques/{id}",
+          "description": "Delete specific objective",
+          "authentication": "public",
+          "pathParams": [
+            {
+              "name": "id",
+              "type": "Long"
+            }
+          ],
+          "response": "void (204 No Content)"
+        },
+        {
+          "method": "GET",
+          "path": "/api/objectifsspecifiques/by-contenu/{idContenuGlobal}",
+          "description": "Get specific objectives by global content ID",
+          "authentication": "public",
+          "pathParams": [
+            {
+              "name": "idContenuGlobal",
+              "type": "Long"
+            }
+          ],
+          "response": "List<GetObjectifSpecifiqueResponse>"
+        },
+        {
+          "method": "GET",
+          "path": "/api/objectifsspecifiques/search",
+          "description": "Search specific objectives by description",
+          "authentication": "public",
+          "queryParams": [
+            {
+              "name": "description",
+              "type": "string"
+            }
+          ],
+          "response": "List<GetObjectifSpecifiqueResponse>"
+        },
+        {
+          "method": "POST",
+          "path": "/api/objectifsspecifiques/copy-and-link",
+          "description": "Copy and link a specific objective",
+          "authentication": "public",
+          "requestBody": "CopyAndLinkObjectifSpecifiqueCommand",
+          "response": "Object"
+        }
+      ]
+    },
+    {
+      "category": "Contenus Globaux",
+      "basePath": "/api/contenusglobaux",
+      "description": "Global content management",
+      "routes": [
+        {
+          "method": "GET",
+          "path": "/api/contenusglobaux",
+          "description": "Get all global contents",
+          "authentication": "public",
+          "response": "List<GetContenuGlobalResponse>"
+        },
+        {
+          "method": "GET",
+          "path": "/api/contenusglobaux/{id}",
+          "description": "Get global content by ID",
+          "authentication": "public",
+          "pathParams": [
+            {
+              "name": "id",
+              "type": "Long"
+            }
+          ],
+          "response": "GetContenuGlobalResponse"
+        },
+        {
+          "method": "POST",
+          "path": "/api/contenusglobaux",
+          "description": "Create new global content",
+          "authentication": "public",
+          "requestBody": "AddContenuGlobalCommand",
+          "response": "Object (201 Created)"
+        },
+        {
+          "method": "PUT",
+          "path": "/api/contenusglobaux/{id}",
+          "description": "Update global content",
+          "authentication": "public",
+          "pathParams": [
+            {
+              "name": "id",
+              "type": "Long"
+            }
+          ],
+          "requestBody": "UpdateContenuGlobalCommand",
+          "response": "void (202 Accepted)"
+        },
+        {
+          "method": "DELETE",
+          "path": "/api/contenusglobaux/{id}",
+          "description": "Delete global content",
+          "authentication": "public",
+          "pathParams": [
+            {
+              "name": "id",
+              "type": "Long"
+            }
+          ],
+          "response": "void (204 No Content)"
+        },
+        {
+          "method": "GET",
+          "path": "/api/contenusglobaux/by-formation/{idFormation}",
+          "description": "Get global contents by formation ID",
+          "authentication": "public",
+          "pathParams": [
+            {
+              "name": "idFormation",
+              "type": "Long"
+            }
+          ],
+          "response": "List<GetContenuGlobalResponse>"
+        }
+      ]
+    },
+    {
+      "category": "Contenus Jour",
+      "basePath": "/api/contenusjour",
+      "description": "Daily content management",
+      "routes": [
+        {
+          "method": "GET",
+          "path": "/api/contenusjour",
+          "description": "Get all daily contents",
+          "authentication": "public",
+          "response": "List<GetContenuJourResponse>"
+        },
+        {
+          "method": "GET",
+          "path": "/api/contenusjour/{id}",
+          "description": "Get daily content by ID",
+          "authentication": "public",
+          "pathParams": [
+            {
+              "name": "id",
+              "type": "Long"
+            }
+          ],
+          "response": "GetContenuJourResponse"
+        },
+        {
+          "method": "GET",
+          "path": "/api/contenusjour/by-objectif/{idObjectifSpec}",
+          "description": "Get daily contents by specific objective ID",
+          "authentication": "public",
+          "pathParams": [
+            {
+              "name": "idObjectifSpec",
+              "type": "Long"
+            }
+          ],
+          "response": "List<GetContenuJourResponse>"
+        },
+        {
+          "method": "POST",
+          "path": "/api/contenusjour",
+          "description": "Create new daily content",
+          "authentication": "public",
+          "requestBody": "AddContenuJourCommand",
+          "response": "Object (201 Created)"
+        },
+        {
+          "method": "PUT",
+          "path": "/api/contenusjour/{id}",
+          "description": "Update daily content",
+          "authentication": "public",
+          "pathParams": [
+            {
+              "name": "id",
+              "type": "Long"
+            }
+          ],
+          "requestBody": "UpdateContenuJourCommand",
+          "response": "void (202 Accepted)"
+        },
+        {
+          "method": "DELETE",
+          "path": "/api/contenusjour/{id}",
+          "description": "Delete daily content",
+          "authentication": "public",
+          "pathParams": [
+            {
+              "name": "id",
+              "type": "Long"
+            }
+          ],
+          "response": "void (204 No Content)"
+        },
+        {
+          "method": "GET",
+          "path": "/api/contenusjour/search",
+          "description": "Search daily contents by titre",
+          "authentication": "public",
+          "queryParams": [
+            {
+              "name": "titre",
+              "type": "string"
+            }
+          ],
+          "response": "List<GetContenuJourResponse>"
+        },
+        {
+          "method": "POST",
+          "path": "/api/contenusjour/{id}/assign-contenus",
+          "description": "Assign detailed contents to daily content",
+          "authentication": "public",
+          "pathParams": [
+            {
+              "name": "id",
+              "type": "Long"
+            }
+          ],
+          "requestBody": "AssignContenusDetaillesCommand",
+          "response": "void"
+        },
+        {
+          "method": "GET",
+          "path": "/api/contenusjour/{id}/assigned-contenus",
+          "description": "Get assigned detailed contents for daily content",
+          "authentication": "public",
+          "pathParams": [
+            {
+              "name": "id",
+              "type": "Long"
+            }
+          ],
+          "response": "List<GetContenuDetailleResponse>"
+        },
+        {
+          "method": "POST",
+          "path": "/api/contenusjour/copy-and-link",
+          "description": "Copy and link daily content",
+          "authentication": "public",
+          "requestBody": "CopyAndLinkContenuJourCommand",
+          "response": "Object"
+        },
+        {
+          "method": "PATCH",
+          "path": "/api/contenusjour/{id}/ordre",
+          "description": "Update ordre of daily content",
+          "authentication": "public",
+          "pathParams": [
+            {
+              "name": "id",
+              "type": "Long"
+            }
+          ],
+          "requestBody": "{ \"nouvelOrdre\": number }",
+          "response": "void"
+        }
+      ]
+    },
+    {
+      "category": "Contenus Détaillés",
+      "basePath": "/api/contenus-detailles",
+      "description": "Detailed content management with file uploads",
+      "routes": [
+        {
+          "method": "POST",
+          "path": "/api/contenus-detailles",
+          "description": "Create new detailed content",
+          "authentication": "public",
+          "requestBody": "AddContenuDetailleCommand",
+          "response": "Object (201 Created)"
+        },
+        {
+          "method": "GET",
+          "path": "/api/contenus-detailles/{id}",
+          "description": "Get detailed content by ID",
+          "authentication": "public",
+          "pathParams": [
+            {
+              "name": "id",
+              "type": "Long"
+            }
+          ],
+          "response": "GetContenuDetailleResponse"
+        },
+        {
+          "method": "GET",
+          "path": "/api/contenus-detailles",
+          "description": "Get all detailed contents",
+          "authentication": "public",
+          "response": "List<GetContenuDetailleResponse>"
+        },
+        {
+          "method": "GET",
+          "path": "/api/contenus-detailles/paginated",
+          "description": "Get paginated detailed contents",
+          "authentication": "public",
+          "queryParams": [
+            {
+              "name": "page",
+              "type": "int",
+              "default": "0"
+            },
+            {
+              "name": "size",
+              "type": "int",
+              "default": "10"
+            },
+            {
+              "name": "sortBy",
+              "type": "string",
+              "default": "idContenuDetaille"
+            },
+            {
+              "name": "sortDirection",
+              "type": "string",
+              "default": "ASC"
+            }
+          ],
+          "response": "PagedContenuDetailleResponse"
+        },
+        {
+          "method": "GET",
+          "path": "/api/contenus-detailles/search",
+          "description": "Search detailed contents by titre",
+          "authentication": "public",
+          "queryParams": [
+            {
+              "name": "titre",
+              "type": "string"
+            }
+          ],
+          "response": "List<GetContenuDetailleResponse>"
+        },
+        {
+          "method": "GET",
+          "path": "/api/contenus-detailles/by-jour/{idJour}",
+          "description": "Get detailed contents by daily content ID",
+          "authentication": "public",
+          "pathParams": [
+            {
+              "name": "idJour",
+              "type": "Long"
+            }
+          ],
+          "response": "List<GetContenuDetailleResponse>"
+        },
+        {
+          "method": "GET",
+          "path": "/api/contenus-detailles/by-formation/{idFormation}",
+          "description": "Get detailed contents by formation ID",
+          "authentication": "public",
+          "pathParams": [
+            {
+              "name": "idFormation",
+              "type": "Long"
+            }
+          ],
+          "response": "List<GetContenuDetailleResponse>"
+        },
+        {
+          "method": "GET",
+          "path": "/api/contenus-detailles/by-formation/{idFormation}/with-jours",
+          "description": "Get detailed contents grouped by daily contents for a formation",
+          "authentication": "public",
+          "pathParams": [
+            {
+              "name": "idFormation",
+              "type": "Long"
+            }
+          ],
+          "response": "List<ContenuDetailleWithJoursResponse>"
+        },
+        {
+          "method": "PUT",
+          "path": "/api/contenus-detailles/{id}",
+          "description": "Update detailed content",
+          "authentication": "public",
+          "pathParams": [
+            {
+              "name": "id",
+              "type": "Long"
+            }
+          ],
+          "requestBody": "UpdateContenuDetailleCommand",
+          "response": "void (202 Accepted)"
+        },
+        {
+          "method": "DELETE",
+          "path": "/api/contenus-detailles/{id}",
+          "description": "Delete detailed content",
+          "authentication": "public",
+          "pathParams": [
+            {
+              "name": "id",
+              "type": "Long"
+            }
+          ],
+          "response": "void (204 No Content)"
+        },
+        {
+          "method": "POST",
+          "path": "/api/contenus-detailles/{id}/levels/{levelNumber}/upload",
+          "description": "Upload file for a specific content level",
+          "authentication": "public",
+          "contentType": "multipart/form-data",
+          "pathParams": [
+            {
+              "name": "id",
+              "type": "Long",
+              "description": "Content ID"
+            },
+            {
+              "name": "levelNumber",
+              "type": "int",
+              "description": "Level number (1-5)"
+            }
+          ],
+          "requestBody": "MultipartFile (form-data: file)",
+          "response": "{ \"message\": string, \"fileName\": string }"
+        },
+        {
+          "method": "GET",
+          "path": "/api/contenus-detailles/files/{filename}",
+          "description": "Download file by filename",
+          "authentication": "public",
+          "pathParams": [
+            {
+              "name": "filename",
+              "type": "string"
+            }
+          ],
+          "response": "File download"
+        },
+        {
+          "method": "GET",
+          "path": "/api/contenus-detailles/view/{filename}",
+          "description": "View/preview file in browser",
+          "authentication": "public",
+          "pathParams": [
+            {
+              "name": "filename",
+              "type": "string"
+            }
+          ],
+          "response": "File inline display"
+        },
+        {
+          "method": "DELETE",
+          "path": "/api/contenus-detailles/{id}/levels/{levelNumber}/files/{filePath}",
+          "description": "Delete file from content level",
+          "authentication": "public",
+          "pathParams": [
+            {
+              "name": "id",
+              "type": "Long"
+            },
+            {
+              "name": "levelNumber",
+              "type": "int"
+            },
+            {
+              "name": "filePath",
+              "type": "string"
+            }
+          ],
+          "response": "void (204 No Content)"
+        },
+        {
+          "method": "GET",
+          "path": "/api/contenus-detailles/{id}/levels/{levelNumber}/files",
+          "description": "Get list of files for a content level",
+          "authentication": "public",
+          "pathParams": [
+            {
+              "name": "id",
+              "type": "Long"
+            },
+            {
+              "name": "levelNumber",
+              "type": "int"
+            }
+          ],
+          "response": "List<string>"
+        }
+      ]
+    },
+    {
+      "category": "Formateurs",
+      "basePath": "/api/formateurs",
+      "description": "Trainer management with photo uploads",
+      "routes": [
+        {
+          "method": "GET",
+          "path": "/api/formateurs",
+          "description": "Get all trainers",
+          "authentication": "public",
+          "response": "List<GetFormateurResponse>"
+        },
+        {
+          "method": "POST",
+          "path": "/api/formateurs",
+          "description": "Create new trainer with photo upload",
+          "authentication": "public",
+          "contentType": "multipart/form-data",
+          "requestBody": "AddFormateurCommand + file",
+          "response": "Object (201 Created)"
+        },
+        {
+          "method": "PUT",
+          "path": "/api/formateurs/{id}",
+          "description": "Update trainer (without photo)",
+          "authentication": "public",
+          "pathParams": [
+            {
+              "name": "id",
+              "type": "Long"
+            }
+          ],
+          "requestBody": "UpdateFormateurCommand",
+          "response": "void (202 Accepted)"
+        },
+        {
+          "method": "GET",
+          "path": "/api/formateurs/{id}",
+          "description": "Get trainer by ID",
+          "authentication": "public",
+          "pathParams": [
+            {
+              "name": "id",
+              "type": "Long"
+            }
+          ],
+          "response": "GetFormateurResponse"
+        },
+        {
+          "method": "DELETE",
+          "path": "/api/formateurs/{id}",
+          "description": "Delete trainer",
+          "authentication": "public",
+          "pathParams": [
+            {
+              "name": "id",
+              "type": "Long"
+            }
+          ],
+          "response": "void (204 No Content)"
+        },
+        {
+          "method": "PUT",
+          "path": "/api/formateurs/{id}/with-file",
+          "description": "Update trainer with photo upload",
+          "authentication": "public",
+          "contentType": "multipart/form-data",
+          "pathParams": [
+            {
+              "name": "id",
+              "type": "Long"
+            }
+          ],
+          "requestBody": "UpdateFormateurCommand + file",
+          "response": "void (202 Accepted)"
+        }
+      ]
+    },
+    {
+      "category": "Domaines",
+      "basePath": "/api/domaines",
+      "description": "Domain/field management",
+      "routes": [
+        {
+          "method": "GET",
+          "path": "/api/domaines/{id}",
+          "description": "Get domain by ID",
+          "authentication": "public",
+          "pathParams": [
+            {
+              "name": "id",
+              "type": "Long"
+            }
+          ],
+          "response": "GetDomaineResponse"
+        },
+        {
+          "method": "GET",
+          "path": "/api/domaines",
+          "description": "Get all domains",
+          "authentication": "public",
+          "response": "List<GetDomaineResponse>"
+        },
+        {
+          "method": "POST",
+          "path": "/api/domaines",
+          "description": "Create new domain",
+          "authentication": "public",
+          "requestBody": "AddDomaineCommand",
+          "response": "Object (201 Created)"
+        },
+        {
+          "method": "PUT",
+          "path": "/api/domaines/{id}",
+          "description": "Update domain",
+          "authentication": "public",
+          "pathParams": [
+            {
+              "name": "id",
+              "type": "Long"
+            }
+          ],
+          "requestBody": "UpdateDomaineCommand",
+          "response": "void (202 Accepted)"
+        },
+        {
+          "method": "DELETE",
+          "path": "/api/domaines/{id}",
+          "description": "Delete domain",
+          "authentication": "public",
+          "pathParams": [
+            {
+              "name": "id",
+              "type": "Long"
+            }
+          ],
+          "response": "void (204 No Content)"
+        }
+      ]
+    },
+    {
+      "category": "Types",
+      "basePath": "/api/types",
+      "description": "Training type management",
+      "routes": [
+        {
+          "method": "GET",
+          "path": "/api/types/{id}",
+          "description": "Get type by ID",
+          "authentication": "public",
+          "pathParams": [
+            {
+              "name": "id",
+              "type": "Long"
+            }
+          ],
+          "response": "GetTypeResponse"
+        },
+        {
+          "method": "GET",
+          "path": "/api/types",
+          "description": "Get all types",
+          "authentication": "public",
+          "response": "List<GetTypeResponse>"
+        },
+        {
+          "method": "POST",
+          "path": "/api/types",
+          "description": "Create new type",
+          "authentication": "public",
+          "requestBody": "AddTypeCommand",
+          "response": "Object (201 Created)"
+        },
+        {
+          "method": "PUT",
+          "path": "/api/types/{id}",
+          "description": "Update type",
+          "authentication": "public",
+          "pathParams": [
+            {
+              "name": "id",
+              "type": "Long"
+            }
+          ],
+          "requestBody": "UpdateTypeCommand",
+          "response": "void (202 Accepted)"
+        },
+        {
+          "method": "DELETE",
+          "path": "/api/types/{id}",
+          "description": "Delete type",
+          "authentication": "public",
+          "pathParams": [
+            {
+              "name": "id",
+              "type": "Long"
+            }
+          ],
+          "response": "void (204 No Content)"
+        }
+      ]
+    },
+    {
+      "category": "Catégories",
+      "basePath": "/api/categories",
+      "description": "Category management",
+      "routes": [
+        {
+          "method": "GET",
+          "path": "/api/categories",
+          "description": "Get all categories",
+          "authentication": "public",
+          "response": "List<GetCategorieResponse>"
+        },
+        {
+          "method": "GET",
+          "path": "/api/categories/{id}",
+          "description": "Get category by ID",
+          "authentication": "public",
+          "pathParams": [
+            {
+              "name": "id",
+              "type": "Long"
+            }
+          ],
+          "response": "GetCategorieResponse"
+        },
+        {
+          "method": "POST",
+          "path": "/api/categories",
+          "description": "Create new category",
+          "authentication": "public",
+          "requestBody": "AddCategorieCommand",
+          "response": "Object (201 Created)"
+        },
+        {
+          "method": "PUT",
+          "path": "/api/categories/{id}",
+          "description": "Update category",
+          "authentication": "public",
+          "pathParams": [
+            {
+              "name": "id",
+              "type": "Long"
+            }
+          ],
+          "requestBody": "UpdateCategorieCommand",
+          "response": "void (202 Accepted)"
+        },
+        {
+          "method": "DELETE",
+          "path": "/api/categories/{id}",
+          "description": "Delete category",
+          "authentication": "public",
+          "pathParams": [
+            {
+              "name": "id",
+              "type": "Long"
+            }
+          ],
+          "response": "void (204 No Content)"
+        },
+        {
+          "method": "GET",
+          "path": "/api/categories/by-type/{idType}",
+          "description": "Get categories by type ID",
+          "authentication": "public",
+          "pathParams": [
+            {
+              "name": "idType",
+              "type": "Long"
+            }
+          ],
+          "response": "List<GetCategorieResponse>"
+        }
+      ]
+    },
+    {
+      "category": "Sous-Catégories",
+      "basePath": "/api/souscategories",
+      "description": "Sub-category management",
+      "routes": [
+        {
+          "method": "GET",
+          "path": "/api/souscategories",
+          "description": "Get all sub-categories",
+          "authentication": "public",
+          "response": "List<GetSousCategorieResponse>"
+        },
+        {
+          "method": "GET",
+          "path": "/api/souscategories/{id}",
+          "description": "Get sub-category by ID",
+          "authentication": "public",
+          "pathParams": [
+            {
+              "name": "id",
+              "type": "Long"
+            }
+          ],
+          "response": "GetSousCategorieResponse"
+        },
+        {
+          "method": "POST",
+          "path": "/api/souscategories",
+          "description": "Create new sub-category",
+          "authentication": "public",
+          "requestBody": "AddSousCategorieCommand",
+          "response": "Object (201 Created)"
+        },
+        {
+          "method": "PUT",
+          "path": "/api/souscategories/{id}",
+          "description": "Update sub-category",
+          "authentication": "public",
+          "pathParams": [
+            {
+              "name": "id",
+              "type": "Long"
+            }
+          ],
+          "requestBody": "UpdateSousCategorieCommand",
+          "response": "void (202 Accepted)"
+        },
+        {
+          "method": "DELETE",
+          "path": "/api/souscategories/{id}",
+          "description": "Delete sub-category",
+          "authentication": "public",
+          "pathParams": [
+            {
+              "name": "id",
+              "type": "Long"
+            }
+          ],
+          "response": "void (204 No Content)"
+        },
+        {
+          "method": "GET",
+          "path": "/api/souscategories/by-categorie/{idCategorie}",
+          "description": "Get sub-categories by category ID",
+          "authentication": "public",
+          "pathParams": [
+            {
+              "name": "idCategorie",
+              "type": "Long"
+            }
+          ],
+          "response": "List<GetSousCategorieResponse>"
+        }
+      ]
+    },
+    {
+      "category": "Examens",
+      "basePath": "/api/examens",
+      "description": "Exam management",
+      "routes": [
+        {
+          "method": "POST",
+          "path": "/api/examens",
+          "description": "Create new exam",
+          "authentication": "public",
+          "requestBody": "AddExamenCommand",
+          "response": "Object (201 Created)"
+        },
+        {
+          "method": "PUT",
+          "path": "/api/examens/{id}",
+          "description": "Update exam",
+          "authentication": "public",
+          "pathParams": [
+            {
+              "name": "id",
+              "type": "Long"
+            }
+          ],
+          "requestBody": "UpdateExamenCommand",
+          "response": "void (202 Accepted)"
+        },
+        {
+          "method": "DELETE",
+          "path": "/api/examens/{id}",
+          "description": "Delete exam",
+          "authentication": "public",
+          "pathParams": [
+            {
+              "name": "id",
+              "type": "Long"
+            }
+          ],
+          "response": "void (204 No Content)"
+        },
+        {
+          "method": "GET",
+          "path": "/api/examens/{id}",
+          "description": "Get exam by ID",
+          "authentication": "public",
+          "pathParams": [
+            {
+              "name": "id",
+              "type": "Long"
+            }
+          ],
+          "response": "GetExamenResponse"
+        },
+        {
+          "method": "GET",
+          "path": "/api/examens",
+          "description": "Get all exams",
+          "authentication": "public",
+          "response": "List<GetExamenResponse>"
+        },
+        {
+          "method": "GET",
+          "path": "/api/examens/plan/{idPlanFormation}",
+          "description": "Get exams by training plan ID",
+          "authentication": "public",
+          "pathParams": [
+            {
+              "name": "idPlanFormation",
+              "type": "Long"
+            }
+          ],
+          "response": "List<GetExamenResponse>"
+        }
+      ]
+    },
+    {
+      "category": "Certificats",
+      "basePath": "/api/certificats",
+      "description": "Certificate management",
+      "routes": [
+        {
+          "method": "POST",
+          "path": "/api/certificats",
+          "description": "Create new certificate",
+          "authentication": "public",
+          "requestBody": "AddCertificatCommand",
+          "response": "Object (201 Created)"
+        },
+        {
+          "method": "PUT",
+          "path": "/api/certificats/{id}",
+          "description": "Update certificate",
+          "authentication": "public",
+          "pathParams": [
+            {
+              "name": "id",
+              "type": "Long"
+            }
+          ],
+          "requestBody": "UpdateCertificatCommand",
+          "response": "void (202 Accepted)"
+        },
+        {
+          "method": "DELETE",
+          "path": "/api/certificats/{id}",
+          "description": "Delete certificate",
+          "authentication": "public",
+          "pathParams": [
+            {
+              "name": "id",
+              "type": "Long"
+            }
+          ],
+          "response": "void (204 No Content)"
+        },
+        {
+          "method": "GET",
+          "path": "/api/certificats",
+          "description": "Get all certificates",
+          "authentication": "public",
+          "response": "List<GetCertificatResponse>"
+        },
+        {
+          "method": "GET",
+          "path": "/api/certificats/{id}",
+          "description": "Get certificate by ID",
+          "authentication": "public",
+          "pathParams": [
+            {
+              "name": "id",
+              "type": "Long"
+            }
+          ],
+          "response": "GetCertificatResponse"
+        },
+        {
+          "method": "GET",
+          "path": "/api/certificats/by-examen/{idExamen}",
+          "description": "Get certificates by exam ID",
+          "authentication": "public",
+          "pathParams": [
+            {
+              "name": "idExamen",
+              "type": "Long"
+            }
+          ],
+          "response": "List<GetCertificatResponse>"
+        }
+      ]
+    },
+    {
+      "category": "Apprenants",
+      "basePath": "/api/apprenants",
+      "description": "Learner/student management",
+      "routes": [
+        {
+          "method": "GET",
+          "path": "/api/apprenants",
+          "description": "Get all learners",
+          "authentication": "public",
+          "response": "List<GetApprenantResponse>"
+        },
+        {
+          "method": "GET",
+          "path": "/api/apprenants/{id}",
+          "description": "Get learner by ID",
+          "authentication": "public",
+          "pathParams": [
+            {
+              "name": "id",
+              "type": "Long"
+            }
+          ],
+          "response": "GetApprenantResponse"
+        },
+        {
+          "method": "GET",
+          "path": "/api/apprenants/plan/{planFormationId}",
+          "description": "Get learners by training plan ID",
+          "authentication": "public",
+          "pathParams": [
+            {
+              "name": "planFormationId",
+              "type": "Long"
+            }
+          ],
+          "response": "List<GetApprenantsByPlanFormationResponse>"
+        },
+        {
+          "method": "POST",
+          "path": "/api/apprenants",
+          "description": "Create new learner",
+          "authentication": "public",
+          "requestBody": "AddApprenantCommand",
+          "response": "Object (201 Created)"
+        },
+        {
+          "method": "PUT",
+          "path": "/api/apprenants/{id}",
+          "description": "Update learner",
+          "authentication": "public",
+          "pathParams": [
+            {
+              "name": "id",
+              "type": "Long"
+            }
+          ],
+          "requestBody": "UpdateApprenantCommand",
+          "response": "void (202 Accepted)"
+        },
+        {
+          "method": "DELETE",
+          "path": "/api/apprenants/{id}",
+          "description": "Delete learner",
+          "authentication": "public",
+          "pathParams": [
+            {
+              "name": "id",
+              "type": "Long"
+            }
+          ],
+          "response": "void (204 No Content)"
+        }
+      ]
+    },
+    {
+      "category": "Evaluations",
+      "basePath": "/api/evaluations",
+      "description": "Evaluation management",
+      "routes": [
+        {
+          "method": "GET",
+          "path": "/api/evaluations",
+          "description": "Get all evaluations",
+          "authentication": "public",
+          "response": "List<GetEvaluationResponse>"
+        },
+        {
+          "method": "GET",
+          "path": "/api/evaluations/{id}",
+          "description": "Get evaluation by ID",
+          "authentication": "public",
+          "pathParams": [
+            {
+              "name": "id",
+              "type": "Long"
+            }
+          ],
+          "response": "GetEvaluationResponse"
+        },
+        {
+          "method": "POST",
+          "path": "/api/evaluations",
+          "description": "Create new evaluation",
+          "authentication": "public",
+          "requestBody": "AddEvaluationCommand",
+          "response": "Object (201 Created)"
+        },
+        {
+          "method": "GET",
+          "path": "/api/evaluations/contenu/{idContenuJour}",
+          "description": "Get evaluations by daily content ID",
+          "authentication": "public",
+          "pathParams": [
+            {
+              "name": "idContenuJour",
+              "type": "Long"
+            }
+          ],
+          "response": "List<GetEvaluationResponse>"
+        },
+        {
+          "method": "PUT",
+          "path": "/api/evaluations/{id}",
+          "description": "Update evaluation",
+          "authentication": "public",
+          "pathParams": [
+            {
+              "name": "id",
+              "type": "Long"
+            }
+          ],
+          "requestBody": "UpdateEvaluationCommand",
+          "response": "void (202 Accepted)"
+        },
+        {
+          "method": "DELETE",
+          "path": "/api/evaluations/{id}",
+          "description": "Delete evaluation",
+          "authentication": "public",
+          "pathParams": [
+            {
+              "name": "id",
+              "type": "Long"
+            }
+          ],
+          "response": "void (204 No Content)"
+        }
+      ]
+    },
+    {
+      "category": "Streaming Upload",
+      "basePath": "/api/streaming-upload",
+      "description": "Large file upload with streaming support",
+      "routes": [
+        {
+          "method": "POST",
+          "path": "/api/streaming-upload/file",
+          "description": "Upload file with streaming (non-multipart)",
+          "authentication": "public",
+          "contentType": "application/octet-stream",
+          "headers": [
+            {
+              "name": "Content-Type",
+              "value": "application/octet-stream"
+            },
+            {
+              "name": "X-File-Name",
+              "value": "filename.ext"
+            }
+          ],
+          "requestBody": "Binary file data",
+          "response": "{ \"message\": string, \"filePath\": string }"
+        },
+        {
+          "method": "POST",
+          "path": "/api/streaming-upload/multipart",
+          "description": "Upload file with multipart streaming",
+          "authentication": "public",
+          "contentType": "multipart/form-data",
+          "requestBody": "MultipartFile",
+          "response": "{ \"message\": string, \"filePath\": string }"
+        },
+        {
+          "method": "GET",
+          "path": "/api/streaming-upload/status",
+          "description": "Check upload service status",
+          "authentication": "public",
+          "response": "{ \"status\": string, \"timestamp\": string }"
+        }
+      ]
+    }
+  ],
+  "notes": {
+    "security": "All formation endpoints are public and do not require authentication.",
+    "cors": "CORS is enabled for localhost:4200, localhost:8080, and platform.sms2i.com.tn",
+    "fileUploads": "File uploads are supported for trainers (photos) and detailed contents (documents/media)",
+    "pagination": "Several endpoints support pagination with page, size, sortBy, and sortDirection parameters",
+    "mediaTypes": [
+      "application/json (default)",
+      "multipart/form-data (file uploads)",
+      "application/octet-stream (streaming uploads)"
+    ]
+  }
+}

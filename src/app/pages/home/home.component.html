@@ -1,0 +1,278 @@
+<!-- Section Hero -->
+<section class="hero">
+  <div class="hero-overlay"></div>
+  <div class="container hero-content">
+    <h1 class="hero-title">BIENVENUE CHEZ SMS2I</h1>
+    <p class="hero-subtitle">
+      SMS2I offre des services complets d'automatisation et de maintenance<br>
+      pour optimiser vos processus industriels.
+    </p>
+    <div class="hero-buttons">
+      <a href="/formations" class="btn btn-primary btn-lg">Découvrir Nos Formations</a>
+      <a href="/contact" class="btn btn-outline btn-lg">Nous Contacter</a>
+    </div>
+  </div>
+</section>
+
+<!-- Section Formations -->
+<section class="section formations-section">
+  <div class="container">
+    <div class="section-header text-center">
+      <h2>Nos Modalités de Formation</h2>
+      <p class="section-subtitle">
+        Des formations certifiantes adaptées à vos besoins et disponibles selon vos préférences
+      </p>
+    </div>
+
+    <div class="formations-grid">
+      @for (formation of formationTypes; track formation.title) {
+        <div class="formation-card card" [class.highlight]="formation.highlight">
+          <div class="formation-icon" [attr.data-icon]="formation.icon">
+            @if (formation.icon === 'on-site') {
+              <svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path>
+                <polyline points="9 22 9 12 15 12 15 22"></polyline>
+              </svg>
+            }
+            @if (formation.icon === 'inter') {
+              <svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path>
+                <circle cx="9" cy="7" r="4"></circle>
+                <path d="M23 21v-2a4 4 0 0 0-3-3.87"></path>
+                <path d="M16 3.13a4 4 0 0 1 0 7.75"></path>
+              </svg>
+            }
+            @if (formation.icon === 'intra') {
+              <svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"></path>
+                <path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"></path>
+              </svg>
+            }
+            @if (formation.icon === 'online') {
+              <svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <rect x="2" y="3" width="20" height="14" rx="2" ry="2"></rect>
+                <line x1="8" y1="21" x2="16" y2="21"></line>
+                <line x1="12" y1="17" x2="12" y2="21"></line>
+              </svg>
+            }
+          </div>
+          <h3>{{ formation.title }}</h3>
+          <p>{{ formation.description }}</p>
+          @if (formation.highlight) {
+            <span class="formation-badge">Populaire</span>
+          }
+        </div>
+      }
+    </div>
+
+    <div class="cta-box">
+      <h3>Formations Certifiantes Disponibles</h3>
+      <p>Automatisme, supervision industrielle, nouvelles technologies et plus encore...</p>
+      <a href="/formations" class="btn btn-primary">Voir Toutes Les Formations</a>
+    </div>
+  </div>
+</section>
+
+<!-- Section Services -->
+<section class="section services-section">
+  <div class="container">
+    <div class="section-header text-center">
+      <h2>Nos Partenaires</h2>
+      <p class="section-subtitle">Ils nous accordent leur confiance</p>
+    </div>
+
+    <div class="partners-marquee">
+      <div class="partners-track">
+        @for (partner of partners; track partner.name) {
+          <div class="partner-item">
+            <span>{{ partner.name }}</span>
+          </div>
+        }
+        <!-- Duplicate for infinite scroll effect -->
+        @for (partner of partners; track partner.name) {
+          <div class="partner-item">
+            <span>{{ partner.name }}</span>
+          </div>
+        }
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Section Services -->
+<section class="section services-section">
+  <div class="container">
+    <div class="section-header text-center">
+      <h2>Nos Services</h2>
+      <p class="section-subtitle">Des solutions complètes pour vos besoins industriels</p>
+    </div>
+
+    <div class="services-grid">
+      @for (service of services; track service.title) {
+        <div class="service-card card">
+          <div class="service-icon">
+            @switch(service.icon) {
+              @case('integration') {
+                <svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <path d="M8 3H5a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h3"></path>
+                  <path d="M16 3h3a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2h-3"></path>
+                  <line x1="12" y1="20" x2="12" y2="10"></line>
+                  <line x1="8" y1="14" x2="16" y2="14"></line>
+                </svg>
+              }
+              @case('automation') {
+                <svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <circle cx="12" cy="12" r="1"></circle>
+                  <path d="M12 1v6m6-1h-5M6 8H1m17 6h5M8 12H3m13 0h5M6 20h12a2 2 0 0 0 2-2V4a2 2 0 0 0-2-2H6a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2z"></path>
+                </svg>
+              }
+              @case('mechanical') {
+                <svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <circle cx="12" cy="12" r="9"></circle>
+                  <path d="M12 6v12M6 12h12"></path>
+                  <circle cx="12" cy="12" r="3"></circle>
+                  <circle cx="18" cy="6" r="1"></circle>
+                  <circle cx="6" cy="6" r="1"></circle>
+                  <circle cx="18" cy="18" r="1"></circle>
+                  <circle cx="6" cy="18" r="1"></circle>
+                </svg>
+              }
+              @case('instrumentation') {
+                <svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <path d="M3 12a9 9 0 1 0 18 0A9 9 0 0 0 3 12z"></path>
+                  <path d="M12 6v6l4 2"></path>
+                </svg>
+              }
+              @case('training') {
+                <svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"></path>
+                  <path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"></path>
+                </svg>
+              }
+              @case('support') {
+                <svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"></path>
+                </svg>
+              }
+            }
+          </div>
+          <h3>{{ service.title }}</h3>
+          <p>{{ service.description }}</p>
+        </div>
+      }
+    </div>
+  </div>
+</section>
+
+<!-- Section Partenaires -->
+<section class="section partners-section">
+<section class="section about-section">
+  <div class="container">
+    <div class="about-content">
+      <div class="about-text">
+        <h2>À propos de SMS2I</h2>
+        <h3 class="about-subtitle">
+          Votre partenaire de confiance pour l'automatisation et la maintenance industrielle
+        </h3>
+        <p>
+          <strong>SMS2I</strong> (Services et Maintenance des Systèmes Informatiques et Industriels)
+          a vu le jour en mai 2008, portée par l'expertise de plusieurs enseignants universitaires.
+          Depuis, nous nous engageons à fournir des solutions sur mesure pour optimiser vos processus industriels.
+        </p>
+        <p>
+          Basés à la zone industrielle de Messaadine (Immeuble Néodeme, Sousse), nous sommes reconnus
+          pour notre rigueur, la qualité de nos interventions et notre capacité à innover en partenariat
+          avec les plus grands (Siemens, Endress+Hauser, etc.).
+        </p>
+        <a href="/about" class="btn btn-secondary">En Savoir Plus</a>
+      </div>
+      <div class="about-image">
+        <div class="about-image-placeholder">
+          <svg xmlns="http://www.w3.org/2000/svg" width="200" height="200" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1">
+            <path d="M12 2L2 7l10 5 10-5-10-5z"></path>
+            <path d="M2 17l10 5 10-5M2 12l10 5 10-5"></path>
+          </svg>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Section Pourquoi Nous -->
+<section class="section features-section">
+  <div class="container">
+    <div class="section-header text-center">
+      <h2>Pourquoi choisir SMS2I ?</h2>
+      <p class="section-subtitle">Notre expertise fait la différence</p>
+    </div>
+
+    <div class="features-grid">
+      @for (feature of features; track feature.title) {
+        <div class="feature-card">
+          <div class="feature-icon-wrapper">
+            <div class="feature-icon">
+              @switch(feature.icon) {
+                @case('siemens') {
+                  <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="currentColor">
+                    <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.42 0-8-3.58-8-8s3.58-8 8-8 8 3.58 8 8-3.58 8-8 8zm3.5-9c.83 0 1.5-.67 1.5-1.5S16.33 8 15.5 8 14 8.67 14 9.5s.67 1.5 1.5 1.5zm-7 0c.83 0 1.5-.67 1.5-1.5S9.33 8 8.5 8 7 8.67 7 9.5 7.67 11 8.5 11zm3.5 6.5c2.33 0 4.31-1.46 5.11-3.5H6.89c.8 2.04 2.78 3.5 5.11 3.5z"/>
+                  </svg>
+                }
+                @case('team') {
+                  <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path>
+                    <circle cx="9" cy="7" r="4"></circle>
+                    <path d="M23 21v-2a4 4 0 0 0-3-3.87"></path>
+                    <path d="M16 3.13a4 4 0 0 1 0 7.75"></path>
+                  </svg>
+                }
+                @case('global') {
+                  <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <circle cx="12" cy="12" r="10"></circle>
+                    <line x1="2" y1="12" x2="22" y2="12"></line>
+                    <path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"></path>
+                  </svg>
+                }
+                @case('quality') {
+                  <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path>
+                    <polyline points="9 12 12 15 15 9"></polyline>
+                  </svg>
+                }
+                @case('innovation') {
+                  <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path>
+                  </svg>
+                }
+                @case('24-7') {
+                  <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <circle cx="12" cy="12" r="10"></circle>
+                    <polyline points="12 6 12 12 16 14"></polyline>
+                  </svg>
+                }
+              }
+            </div>
+          </div>
+          <h4>{{ feature.title }}</h4>
+          <p>{{ feature.description }}</p>
+        </div>
+      }
+    </div>
+  </div>
+</section>
+
+<!-- Section CTA Final -->
+<section class="section cta-section">
+  <div class="container">
+    <div class="cta-content text-center">
+      <h2>Prêt à Transformer Votre Industrie ?</h2>
+      <p>
+        Contactez-nous dès aujourd'hui pour discuter de vos besoins en automatisation,<br>
+        formation et maintenance industrielle.
+      </p>
+      <div class="cta-buttons">
+        <a href="/contact" class="btn btn-primary btn-lg">Demander Un Devis</a>
+        <a href="/formations" class="btn btn-outline btn-lg">Explorer Les Formations</a>
+      </div>
+    </div>
+  </div>
+</section>

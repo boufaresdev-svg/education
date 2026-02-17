@@ -1,0 +1,1865 @@
+<div class="dashboard-container">
+  <!-- Enhanced Sidebar Navigation -->
+  <aside class="modern-sidebar">
+    <div class="sidebar-brand">
+      <div class="brand-logo">
+        <div class="logo-icon">
+          <svg viewBox="0 0 24 24" fill="currentColor">
+            <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/>
+          </svg>
+        </div>
+        <div class="brand-text">
+          <h1>SMS2I</h1>
+          <span>Admin Hub</span>
+        </div>
+      </div>
+      <button class="sidebar-toggle" (click)="toggleSidebar()">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor">
+          <line x1="3" y1="6" x2="21" y2="6"></line>
+          <line x1="3" y1="12" x2="21" y2="12"></line>
+          <line x1="3" y1="18" x2="21" y2="18"></line>
+        </svg>
+      </button>
+    </div>
+
+    <nav class="nav-menu">
+      <div class="nav-section">
+        <span class="nav-label">DASHBOARD</span>
+        <button
+          [class.active]="activeTab === 'user'"
+          (click)="activeTab = 'user'"
+          class="nav-item">
+          <div class="nav-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor">
+              <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
+              <circle cx="12" cy="7" r="4"></circle>
+            </svg>
+          </div>
+          <span class="nav-text">Mes Formations</span>
+          <div class="nav-indicator"></div>
+        </button>
+
+        <button
+          [class.active]="activeTab === 'courses'"
+          (click)="activeTab = 'courses'"
+          class="nav-item">
+          <div class="nav-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor">
+              <path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"></path>
+              <path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"></path>
+            </svg>
+          </div>
+          <span class="nav-text">Bibliothèque</span>
+          <div class="nav-indicator"></div>
+        </button>
+      </div>
+
+      <div class="nav-section">
+        <span class="nav-label">CRÉATION</span>
+        <button
+          [class.active]="activeTab === 'create'"
+          (click)="activeTab = 'create'"
+          class="nav-item">
+          <div class="nav-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor">
+              <circle cx="12" cy="12" r="10"></circle>
+              <line x1="12" y1="8" x2="12" y2="16"></line>
+              <line x1="8" y1="12" x2="16" y2="12"></line>
+            </svg>
+          </div>
+          <span class="nav-text">Nouveau Cours</span>
+          <div class="nav-indicator"></div>
+        </button>
+
+        <button
+          [class.active]="activeTab === 'manage'"
+          (click)="activeTab = 'manage'"
+          class="nav-item">
+          <div class="nav-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor">
+              <path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z"></path>
+            </svg>
+          </div>
+          <span class="nav-text">Éditeur</span>
+          <div class="nav-indicator"></div>
+        </button>
+      </div>
+    </nav>
+
+    <div class="sidebar-actions">
+      <div class="user-profile">
+        <div class="profile-avatar">
+          <svg viewBox="0 0 24 24" fill="currentColor">
+            <path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/>
+          </svg>
+        </div>
+        <div class="profile-info">
+          <span class="profile-name">Admin</span>
+          <span class="profile-role">Super User</span>
+        </div>
+      </div>
+      <button class="logout-btn" (click)="logout()">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor">
+          <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"></path>
+          <polyline points="16,17 21,12 16,7"></polyline>
+          <line x1="21" y1="12" x2="9" y2="12"></line>
+        </svg>
+        Déconnexion
+      </button>
+    </div>
+  </aside>
+
+  <!-- Modern Main Content -->
+  <main class="dashboard-main">
+    <div class="content-header">
+      <div class="header-info">
+        <h1 class="page-title">
+          @if (activeTab === 'user') { Mes Formations }
+          @if (activeTab === 'courses') { Bibliothèque de Cours }
+          @if (activeTab === 'create') { Créer un Cours }
+          @if (activeTab === 'manage') { Éditeur de Contenu }
+        </h1>
+        <p class="page-subtitle">
+          @if (activeTab === 'user') { Découvrez vos formations personnalisées }
+          @if (activeTab === 'courses') { Gérez votre collection de cours }
+          @if (activeTab === 'create') { Concevez de nouvelles expériences d'apprentissage }
+          @if (activeTab === 'manage') { Enrichissez vos cours avec du contenu multimédia }
+        </p>
+      </div>
+      <div class="header-actions">
+        <button class="action-btn secondary">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor">
+            <circle cx="11" cy="11" r="8"></circle>
+            <path d="m21 21-4.35-4.35"></path>
+          </svg>
+          Rechercher
+        </button>
+        <button class="action-btn primary">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor">
+            <line x1="12" y1="5" x2="12" y2="19"></line>
+            <line x1="5" y1="12" x2="19" y2="12"></line>
+          </svg>
+          Nouveau
+        </button>
+      </div>
+    </div>
+
+    <!-- Tab: Mes Formations (User Section) -->
+    @if (activeTab === 'user') {
+      <div class="content-body">
+        <div class="insights-grid">
+          <div class="insight-card progress">
+            <div class="insight-icon">
+              <svg viewBox="0 0 24 24" fill="currentColor">
+                <path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/>
+              </svg>
+            </div>
+            <div class="insight-data">
+              <h3>3</h3>
+              <p>Formations Complétées</p>
+            </div>
+          </div>
+
+          <div class="insight-card active">
+            <div class="insight-icon">
+              <svg viewBox="0 0 24 24" fill="currentColor">
+                <circle cx="12" cy="12" r="10"/>
+                <polygon points="10,8 16,12 10,16 10,8"/>
+              </svg>
+            </div>
+            <div class="insight-data">
+              <h3>2</h3>
+              <p>En Cours</p>
+            </div>
+          </div>
+
+          <div class="insight-card pending">
+            <div class="insight-icon">
+              <svg viewBox="0 0 24 24" fill="currentColor">
+                <circle cx="12" cy="12" r="10"/>
+                <polyline points="12,6 12,12 16,14"/>
+              </svg>
+            </div>
+            <div class="insight-data">
+              <h3>1</h3>
+              <p>Disponibles</p>
+            </div>
+          </div>
+        </div>
+
+        <!-- Smart Filter System -->
+        <div class="filter-panel">
+          <div class="filter-header">
+            <h3>Filtres Intelligents</h3>
+            <button class="filter-reset">Réinitialiser</button>
+          </div>
+          <div class="filter-chips">
+            <button
+              (click)="userCategoryFilter = 'all'"
+              [class.active]="userCategoryFilter === 'all'"
+              class="filter-chip all">
+              <span class="chip-icon">🎯</span>
+              <span>Toutes</span>
+              <span class="chip-count">{{ courses.length }}</span>
+            </button>
+            @for (category of categoryOptions; track category.value) {
+              <button
+                (click)="changeUserFilter(category.value)"
+                [class.active]="userCategoryFilter === category.value"
+                [class]="'filter-chip ' + category.value">
+                <span class="chip-icon">
+                  @if (category.value === 'thermo') { 🔥 }
+                  @if (category.value === 'automatisme') { ⚙️ }
+                  @if (category.value === 'process') { 🔄 }
+                </span>
+                <span>{{ category.label }}</span>
+                <span class="chip-count">{{ getCoursesByCategory(category.value).length }}</span>
+              </button>
+            }
+          </div>
+        </div>
+
+        <!-- Modern Formations Grid -->
+        @if (getFilteredCoursesForUser().length > 0) {
+          <div class="modern-grid">
+            @for (course of getFilteredCoursesForUser(); track course.id) {
+              <article class="course-card" [class]="'category-' + course.category">
+                <div class="card-media">
+                  @if (course.image) {
+                    <img [src]="course.image" [alt]="course.title" class="course-image" />
+                  }
+                  <div class="media-overlay">
+                    @if (course.accessKey || course.access_key) {
+                      <div class="access-badge unlocked">
+                        <svg viewBox="0 0 24 24" fill="currentColor">
+                          <path d="M12,17A2,2 0 0,0 14,15C14,13.89 13.1,13 12,13A2,2 0 0,0 10,15A2,2 0 0,0 12,17M18,8A2,2 0 0,1 20,10V20A2,2 0 0,1 18,22H6A2,2 0 0,1 4,20V10C4,8.89 4.9,8 6,8H7V6A5,5 0 0,1 12,1A5,5 0 0,1 17,6V8H18M12,3A3,3 0 0,0 9,6V8H15V6A3,3 0 0,0 12,3Z"/>
+                        </svg>
+                        <span>Débloqué</span>
+                      </div>
+                    } @else {
+                      <div class="access-badge locked">
+                        <svg viewBox="0 0 24 24" fill="currentColor">
+                          <path d="M12,17A2,2 0 0,0 14,15C14,13.89 13.1,13 12,13A2,2 0 0,0 10,15A2,2 0 0,0 12,17M18,8A2,2 0 0,1 20,10V20A2,2 0 0,1 18,22H6A2,2 0 0,1 4,20V10C4,8.89 4.9,8 6,8H7V6A5,5 0 0,1 12,1A5,5 0 0,1 17,6V8H18M12,3A3,3 0 0,0 9,6V8H15V6A3,3 0 0,0 12,3Z"/>
+                        </svg>
+                        <span>Verrouillé</span>
+                      </div>
+                    }
+                  </div>
+                  <div class="course-category">
+                    <span class="category-tag" [class]="course.category">
+                      @if (course.category === 'thermo') { Thermodynamique }
+                      @if (course.category === 'automatisme') { Automatisme }
+                      @if (course.category === 'process') { Processus }
+                    </span>
+                  </div>
+                </div>
+
+                <div class="card-content">
+                  <header class="course-header">
+                    <h3 class="course-title">{{ course.title }}</h3>
+                    <p class="course-description">{{ course.description }}</p>
+                  </header>
+
+                  @if (course.contents.length > 0) {
+                    <div class="course-modules">
+                      <div class="modules-header">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                          <rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect>
+                          <line x1="9" y1="9" x2="15" y2="9"></line>
+                          <line x1="9" y1="15" x2="15" y2="15"></line>
+                        </svg>
+                        <span>{{ course.contents.length }} modules</span>
+                      </div>
+                      <div class="modules-preview">
+                        @for (content of course.contents.slice(0, 3); track content.id) {
+                          <div class="module-chip">
+                            <span class="module-name">{{ content.title }}</span>
+                            @if (content.duration) {
+                              <span class="module-time">{{ content.duration }}</span>
+                            }
+                          </div>
+                        }
+                        @if (course.contents.length > 3) {
+                          <div class="module-chip more">
+                            +{{ course.contents.length - 3 }} autres
+                          </div>
+                        }
+                      </div>
+                    </div>
+                  }
+                </div>
+
+                <footer class="card-actions">
+                  @if (course.accessKey || course.access_key) {
+                    <button class="action-button primary">
+                      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                        <polygon points="5,3 19,12 5,21 5,3"></polygon>
+                      </svg>
+                      Commencer
+                    </button>
+                  } @else {
+                    <button class="action-button disabled" disabled>
+                      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                        <rect x="3" y="11" width="18" height="10" rx="2" ry="2"></rect>
+                        <circle cx="12" cy="16" r="1"></circle>
+                        <path d="m7 11V7a5 5 0 0 1 10 0v4"></path>
+                      </svg>
+                      Accès Requis
+                    </button>
+                  }
+                  <button class="action-button secondary">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                      <circle cx="12" cy="12" r="10"></circle>
+                      <path d="M9,11 l3,3 l3,-3"></path>
+                    </svg>
+                    Détails
+                  </button>
+                </footer>
+              </article>
+            }
+          </div>
+        } @else {
+          <div class="empty-state modern">
+            <div class="empty-icon">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                <circle cx="12" cy="12" r="10"></circle>
+                <path d="M8 14s1.5 2 4 2 4-2 4-2"></path>
+                <line x1="9" y1="9" x2="9.01" y2="9"></line>
+                <line x1="15" y1="9" x2="15.01" y2="9"></line>
+              </svg>
+            </div>
+            <h2>Aucune formation disponible</h2>
+            <p>Explorez d'autres catégories ou contactez votre administrateur</p>
+            <button class="empty-action">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+                <polyline points="7,10 12,15 17,10"></polyline>
+                <line x1="12" y1="15" x2="12" y2="3"></line>
+              </svg>
+              Demander l'accès
+            </button>
+          </div>
+        }
+      </div>
+    }
+
+    <!-- Other tabs would go here with similar modern styling -->
+    @if (activeTab === 'courses') {
+      <div class="tab-content">
+        <div class="content-header">
+          <h1>Bibliothèque de Cours</h1>
+          <p>Gérez et organisez tous vos cours de formation</p>
+        </div>
+
+        @if (courses.length > 0) {
+          <!-- Improved Search and Filter Controls -->
+          <div class="bibliotheque-controls card">
+            <div class="search-sort-bar">
+              <div class="search-container">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" class="search-icon">
+                  <circle cx="11" cy="11" r="8"></circle>
+                  <path d="m21 21-4.35-4.35"></path>
+                </svg>
+                <input
+                  type="text"
+                  [(ngModel)]="bibliothequeSearchTerm"
+                  placeholder="Rechercher par titre ou description..."
+                  class="search-input"
+                />
+              </div>
+
+              <div class="sort-container">
+                <label for="sort-select">Trier par:</label>
+                <select
+                  id="sort-select"
+                  [(ngModel)]="bibliothequeSort"
+                  class="sort-select"
+                >
+                  <option value="date">Date (Plus récent)</option>
+                  <option value="title">Titre (A-Z)</option>
+                  <option value="category">Catégorie</option>
+                  <option value="access">Statut d'accès</option>
+                </select>
+              </div>
+            </div>
+
+            <!-- Bulk Actions Bar -->
+            @if (selectedCourseIds.size > 0) {
+              <div class="bulk-actions-bar">
+                <span class="selection-count">{{ selectedCourseIds.size }} cours sélectionné(s)</span>
+                <div class="bulk-action-buttons">
+                  <button
+                    (click)="generateAccessKeysForSelected()"
+                    class="btn btn-info btn-small">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                      <rect x="3" y="11" width="18" height="10" rx="2" ry="2"></rect>
+                      <path d="M7 11V7a5 5 0 0110 0v4"></path>
+                    </svg>
+                    Générer Clés ({{ selectedCourseIds.size }})
+                  </button>
+                  <button
+                    (click)="exportCoursesAsJson()"
+                    class="btn btn-secondary btn-small">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                      <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+                      <polyline points="7,10 12,15 17,10"></polyline>
+                      <line x1="12" y1="15" x2="12" y2="3"></line>
+                    </svg>
+                    Exporter
+                  </button>
+                  <button
+                    (click)="deleteSelectedCourses()"
+                    class="btn btn-danger btn-small">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                      <polyline points="3 6 5 6 21 6"></polyline>
+                      <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path>
+                    </svg>
+                    Supprimer
+                  </button>
+                </div>
+              </div>
+            }
+          </div>
+
+          <!-- Improved Courses List View -->
+          <div class="courses-overview improved">
+            @if (searchCourses(bibliothequeSearchTerm).length > 0) {
+              @for (course of searchCourses(bibliothequeSearchTerm); track course.id) {
+                <div class="course-item-enhanced card">
+                  <!-- Checkbox for bulk selection -->
+                  <div class="course-checkbox">
+                    <input
+                      type="checkbox"
+                      [checked]="selectedCourseIds.has(course.id)"
+                      (change)="toggleCourseSelection(course.id)"
+                      class="checkbox"
+                    />
+                  </div>
+
+                  <div class="course-main-info">
+                    <div class="course-header-enhanced">
+                      <h3>{{ course.title }}</h3>
+                      <div class="course-meta-tags">
+                        <span class="category-tag" [class]="course.category">
+                          {{ getCategoryLabel(course.category) }}
+                        </span>
+                        <span [class]="'access-badge ' + getAccessKeyClass(course)">
+                          @if (course.accessKey) {
+                            <svg viewBox="0 0 24 24" fill="currentColor">
+                              <path d="M12,17A2,2 0 0,0 14,15C14,13.89 13.1,13 12,13A2,2 0 0,0 10,15A2,2 0 0,0 12,17M18,8A2,2 0 0,1 20,10V20A2,2 0 0,1 18,22H6A2,2 0 0,1 4,20V10C4,8.89 4.9,8 6,8H7V6A5,5 0 0,1 12,1A5,5 0 0,1 17,6V8H18M12,3A3,3 0 0,0 9,6V8H15V6A3,3 0 0,0 12,3Z"/>
+                            </svg>
+                            Débloqué
+                          } @else {
+                            <svg viewBox="0 0 24 24" fill="currentColor">
+                              <path d="M12,17A2,2 0 0,0 14,15C14,13.89 13.1,13 12,13A2,2 0 0,0 10,15A2,2 0 0,0 12,17M18,8A2,2 0 0,1 20,10V20A2,2 0 0,1 18,22H6A2,2 0 0,1 4,20V10C4,8.89 4.9,8 6,8H7V6A5,5 0 0,1 12,1A5,5 0 0,1 17,6V8H18M12,3A3,3 0 0,0 9,6V8H15V6A3,3 0 0,0 12,3Z"/>
+                            </svg>
+                            Verrouillé
+                          }
+                        </span>
+                      </div>
+                    </div>
+                    <p class="course-description">{{ course.description }}</p>
+
+                    <!-- Course Statistics -->
+                    <div class="course-stats">
+                      <div class="stat-item">
+                        <span class="stat-icon">📚</span>
+                        <span>{{ getCourseStats(course).modules }} modules</span>
+                      </div>
+                      <div class="stat-item">
+                        <span class="stat-icon">⏱️</span>
+                        <span>{{ getCourseStats(course).totalDuration }}</span>
+                      </div>
+                      <div class="stat-item">
+                        <span class="stat-icon">📅</span>
+                        <span>{{ course.updatedAt ? (course.updatedAt | date:'short') : (course.createdAt | date:'short') }}</span>
+                      </div>
+                    </div>
+                  </div>
+
+                  <!-- Course Actions -->
+                  <div class="course-actions-enhanced">
+                    <button
+                      (click)="previewCourseDetails(course)"
+                      class="action-icon-btn"
+                      title="Aperçu">
+                      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                        <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path>
+                        <circle cx="12" cy="12" r="3"></circle>
+                      </svg>
+                    </button>
+                    <button
+                      (click)="selectCourse(course)"
+                      class="action-icon-btn"
+                      title="Modifier">
+                      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                        <path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z"></path>
+                      </svg>
+                    </button>
+                    <button
+                      (click)="duplicateCourse(course)"
+                      class="action-icon-btn"
+                      title="Dupliquer">
+                      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                        <rect x="3" y="3" width="7" height="7"></rect>
+                        <rect x="14" y="3" width="7" height="7"></rect>
+                        <rect x="14" y="14" width="7" height="7"></rect>
+                        <rect x="3" y="14" width="7" height="7"></rect>
+                      </svg>
+                    </button>
+                    @if (!course.accessKey && !course.access_key) {
+                      <button
+                        (click)="generateAccessKey(course)"
+                        class="action-icon-btn generate"
+                        title="Générer clé">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                          <circle cx="12" cy="12" r="10"></circle>
+                          <line x1="12" y1="8" x2="12" y2="16"></line>
+                          <line x1="8" y1="12" x2="16" y2="12"></line>
+                        </svg>
+                      </button>
+                    } @else {
+                      <button
+                        (click)="copyToClipboard(course.accessKey || course.access_key || '')"
+                        class="action-icon-btn copy"
+                        title="Copier clé">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                          <path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2"></path>
+                          <rect x="8" y="2" width="8" height="4" rx="1" ry="1"></rect>
+                        </svg>
+                      </button>
+                    }
+                    <button
+                      (click)="deleteCourse(course.id)"
+                      class="action-icon-btn delete"
+                      title="Supprimer">
+                      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                        <polyline points="3 6 5 6 21 6"></polyline>
+                        <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path>
+                      </svg>
+                    </button>
+                  </div>
+                </div>
+              }
+            } @else {
+              <div class="empty-state modern">
+                <div class="empty-icon">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                    <circle cx="11" cy="11" r="8"></circle>
+                    <path d="m21 21-4.35-4.35"></path>
+                  </svg>
+                </div>
+                <h2>Aucun cours trouvé</h2>
+                <p>Essayez une autre recherche ou tri</p>
+              </div>
+            }
+          </div>
+        } @else {
+          <div class="empty-state">
+            <svg xmlns="http://www.w3.org/2000/svg" width="64" height="64" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"></path>
+              <path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"></path>
+            </svg>
+            <h2>Aucun cours créé</h2>
+            <p>Commencez par créer votre premier cours</p>
+          </div>
+        }
+      </div>
+
+      <!-- Course Preview Modal -->
+      @if (showCoursePreview && previewCourse) {
+        <div class="modal-overlay" (click)="closePreview()">
+          <div class="modal-content course-preview-modal" (click)="$event.stopPropagation()">
+            <div class="modal-header">
+              <h2>Aperçu du Cours</h2>
+              <button class="modal-close" (click)="closePreview()">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                  <line x1="18" y1="6" x2="6" y2="18"></line>
+                  <line x1="6" y1="6" x2="18" y2="18"></line>
+                </svg>
+              </button>
+            </div>
+            <div class="modal-body">
+              <div class="preview-item">
+                <strong>Titre:</strong> {{ previewCourse.title }}
+              </div>
+              <div class="preview-item">
+                <strong>Catégorie:</strong> {{ getCategoryLabel(previewCourse.category) }}
+              </div>
+              <div class="preview-item">
+                <strong>Description:</strong> {{ previewCourse.description }}
+              </div>
+              <div class="preview-item">
+                <strong>Modules:</strong> {{ getCourseStats(previewCourse).modules }}
+              </div>
+              <div class="preview-item">
+                <strong>Durée totale:</strong> {{ getCourseStats(previewCourse).totalDuration }}
+              </div>
+              <div class="preview-item">
+                <strong>Créé le:</strong> {{ previewCourse.createdAt | date:'medium' }}
+              </div>
+              @if (previewCourse.updatedAt) {
+                <div class="preview-item">
+                  <strong>Modifié le:</strong> {{ previewCourse.updatedAt | date:'medium' }}
+                </div>
+              }
+              <div class="preview-item">
+                <strong>Statut d'accès:</strong>
+                @if (previewCourse.accessKey || previewCourse.access_key) {
+                  <span class="access-badge active">✓ Débloqué ({{ previewCourse.accessKey || previewCourse.access_key }})</span>
+                } @else {
+                  <span class="access-badge inactive">✗ Verrouillé</span>
+                }
+              </div>
+              @if (previewCourse.contents.length > 0) {
+                <div class="preview-item">
+                  <strong>Contenu:</strong>
+                  <ul class="content-list">
+                    @for (content of previewCourse.contents; track content.id) {
+                      <li>
+                        <span class="content-title">{{ content.title }}</span>
+                        @if (content.duration) {
+                          <span class="content-duration">{{ content.duration }}</span>
+                        }
+                      </li>
+                    }
+                  </ul>
+                </div>
+              }
+            </div>
+            <div class="modal-footer">
+              <button (click)="closePreview()" class="btn btn-secondary">Fermer</button>
+            </div>
+          </div>
+        </div>
+      }
+    }
+
+    <!-- Tab: Créer un Nouveau Cours -->
+    @if (activeTab === 'create') {
+      <div class="tab-content">
+        <div class="content-header">
+          <h1>Créer un Nouveau Cours</h1>
+          <p>Concevez une nouvelle expérience d'apprentissage pour vos étudiants</p>
+        </div>
+
+        <div class="create-course-container">
+          <!-- Left Side: Form -->
+          <div class="form-column">
+            <div class="form-section card">
+              <!-- Progress Bar -->
+              <div class="form-progress">
+                <div class="progress-header">
+                  <span>Progression du formulaire</span>
+                  <span class="progress-percentage">{{ getCourseFormProgress() }}%</span>
+                </div>
+                <div class="progress-bar-container">
+                  <div class="progress-bar-fill" [style.width.%]="getCourseFormProgress()"></div>
+                </div>
+              </div>
+
+              <form (ngSubmit)="submitCourseForm()" class="admin-form improved-form">
+                <!-- Titre -->
+                <div class="form-group">
+                  <label for="course-title">
+                    <span class="label-text">Titre du Cours</span>
+                    <span class="required">*</span>
+                  </label>
+                  <div class="input-wrapper">
+                    <input
+                      type="text"
+                      id="course-title"
+                      [(ngModel)]="newCourse.title"
+                      name="title"
+                      placeholder="Ex: Automatisme Avancé - Niveau 2"
+                      maxlength="100"
+                      class="form-input"
+                      [class.error]="courseFormErrors['title']"
+                    />
+                    <span class="char-count">{{ newCourse.title.length }}/100</span>
+                  </div>
+                  @if (courseFormErrors['title']) {
+                    <span class="error-message">{{ courseFormErrors['title'] }}</span>
+                  }
+                </div>
+
+                <!-- Catégorie -->
+                <div class="form-group">
+                  <label for="course-category">
+                    <span class="label-text">Catégorie</span>
+                    <span class="required">*</span>
+                  </label>
+                  <select
+                    id="course-category"
+                    [(ngModel)]="newCourse.category"
+                    name="category"
+                    class="form-select"
+                    required
+                  >
+                    @for (cat of categoryOptions; track cat.value) {
+                      <option [value]="cat.value">{{ cat.label }}</option>
+                    }
+                  </select>
+                  <svg class="select-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                    <polyline points="6 9 12 15 18 9"></polyline>
+                  </svg>
+                </div>
+
+                <!-- Niveau de difficulté -->
+                <div class="form-group">
+                  <label for="course-level">
+                    <span class="label-text">Niveau de Difficulté</span>
+                  </label>
+                  <div class="level-options">
+                    <button
+                      type="button"
+                      (click)="newCourse.level = 'beginner'"
+                      [class.active]="newCourse.level === 'beginner'"
+                      class="level-btn beginner">
+                      <span class="level-icon">🟢</span>
+                      <span>Débutant</span>
+                    </button>
+                    <button
+                      type="button"
+                      (click)="newCourse.level = 'intermediate'"
+                      [class.active]="newCourse.level === 'intermediate'"
+                      class="level-btn intermediate">
+                      <span class="level-icon">🟡</span>
+                      <span>Intermédiaire</span>
+                    </button>
+                    <button
+                      type="button"
+                      (click)="newCourse.level = 'advanced'"
+                      [class.active]="newCourse.level === 'advanced'"
+                      class="level-btn advanced">
+                      <span class="level-icon">🔴</span>
+                      <span>Avancé</span>
+                    </button>
+                  </div>
+                </div>
+
+                <!-- Description -->
+                <div class="form-group">
+                  <label for="course-description">
+                    <span class="label-text">Description</span>
+                    <span class="required">*</span>
+                  </label>
+                  <div class="textarea-wrapper">
+                    <textarea
+                      id="course-description"
+                      [(ngModel)]="newCourse.description"
+                      name="description"
+                      placeholder="Décrivez le contenu, les objectifs et les compétences acquises..."
+                      rows="5"
+                      maxlength="1000"
+                      class="form-textarea"
+                      [class.error]="courseFormErrors['description']"
+                    ></textarea>
+                    <span class="char-count">{{ newCourse.description.length }}/1000</span>
+                  </div>
+                  @if (courseFormErrors['description']) {
+                    <span class="error-message">{{ courseFormErrors['description'] }}</span>
+                  }
+                </div>
+
+                <!-- Objectifs d'apprentissage -->
+                <div class="form-group">
+                  <label for="course-objectives">
+                    <span class="label-text">Objectifs d'Apprentissage</span>
+                  </label>
+                  <div class="textarea-wrapper">
+                    <textarea
+                      id="course-objectives"
+                      [(ngModel)]="newCourse.objectives"
+                      name="objectives"
+                      placeholder="- L'étudiant sera capable de...&#10;- Comprendre les concepts de...&#10;- Appliquer les techniques de..."
+                      rows="4"
+                      maxlength="500"
+                      class="form-textarea"
+                    ></textarea>
+                    <span class="char-count">{{ newCourse.objectives.length }}/500</span>
+                  </div>
+                </div>
+
+                <!-- Durée -->
+                <div class="form-group">
+                  <label for="course-duration">
+                    <span class="label-text">Durée Estimée (en heures)</span>
+                  </label>
+                  <div class="input-wrapper">
+                    <input
+                      type="number"
+                      id="course-duration"
+                      [(ngModel)]="newCourse.duration"
+                      name="duration"
+                      placeholder="Ex: 10"
+                      min="0.5"
+                      step="0.5"
+                      class="form-input"
+                    />
+                    <span class="unit">heures</span>
+                  </div>
+                  @if (courseFormErrors['duration']) {
+                    <span class="error-message">{{ courseFormErrors['duration'] }}</span>
+                  }
+                </div>
+
+                <!-- Image de couverture -->
+                <div class="form-group">
+                  <label for="course-image-input">
+                    <span class="label-text">Image de Couverture</span>
+                  </label>
+                  @if (newCourse.image && newCourse.imagePreview) {
+                    <div class="image-preview-container">
+                      <img [src]="newCourse.imagePreview" [alt]="newCourse.image.name" class="preview-image" />
+                      <div class="image-info">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                          <rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect>
+                          <circle cx="8.5" cy="8.5" r="1.5"></circle>
+                          <polyline points="21 15 16 10 5 21"></polyline>
+                        </svg>
+                        <span>{{ newCourse.image.name }}</span>
+                      </div>
+                      <button type="button" (click)="removeCourseImage()" class="remove-image-btn">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                          <line x1="18" y1="6" x2="6" y2="18"></line>
+                          <line x1="6" y1="6" x2="18" y2="18"></line>
+                        </svg>
+                      </button>
+                    </div>
+                  } @else {
+                    <label for="course-image-input" class="file-upload-area">
+                      <input
+                        type="file"
+                        id="course-image-input"
+                        (change)="onCourseImageSelected($event)"
+                        accept="image/*"
+                        class="file-input"
+                      />
+                      <div class="upload-content">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                          <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+                          <polyline points="17,8 12,3 7,8"></polyline>
+                          <line x1="12" y1="3" x2="12" y2="15"></line>
+                        </svg>
+                        <p>Glissez votre image ici ou <span class="link">cliquez pour parcourir</span></p>
+                        <span class="hint">PNG, JPG jusqu'à 5MB</span>
+                      </div>
+                    </label>
+                  }
+                  @if (courseFormErrors['image']) {
+                    <span class="error-message">{{ courseFormErrors['image'] }}</span>
+                  }
+                </div>
+
+                <!-- Form Actions -->
+                <div class="form-actions">
+                  <button type="button" (click)="toggleCoursePreview()" class="btn btn-secondary">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                      <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path>
+                      <circle cx="12" cy="12" r="3"></circle>
+                    </svg>
+                    Aperçu
+                  </button>
+                  <button type="submit" class="btn btn-primary btn-lg">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                      <path d="M12 5v14M5 12h14"></path>
+                    </svg>
+                    Créer le Cours
+                  </button>
+                </div>
+              </form>
+            </div>
+          </div>
+
+          <!-- Right Side: Preview -->
+          @if (showCourseFormPreview) {
+            <div class="preview-column">
+              <div class="preview-card card">
+                <h3 class="preview-title">Aperçu du Cours</h3>
+
+                <div class="preview-content-box">
+                  <!-- Course Card Preview -->
+                  <div class="course-preview-card">
+                    <div class="preview-header">
+                      <div class="preview-badge" [class]="newCourse.level">
+                        @if (newCourse.level === 'beginner') { 🟢 Débutant }
+                        @if (newCourse.level === 'intermediate') { 🟡 Intermédiaire }
+                        @if (newCourse.level === 'advanced') { 🔴 Avancé }
+                      </div>
+                      <span class="preview-category">{{ getCategoryLabel(newCourse.category) }}</span>
+                    </div>
+
+                    <h4 class="preview-course-title">{{ newCourse.title || 'Titre du cours...' }}</h4>
+
+                    <p class="preview-description">
+                      {{ newCourse.description || 'La description apparaîtra ici...' }}
+                    </p>
+
+                    @if (newCourse.duration) {
+                      <div class="preview-info-item">
+                        <span class="info-icon">⏱️</span>
+                        <span>{{ newCourse.duration }} heures</span>
+                      </div>
+                    }
+
+                    @if (newCourse.objectives) {
+                      <div class="preview-objectives">
+                        <strong>Objectifs:</strong>
+                        <p>{{ newCourse.objectives }}</p>
+                      </div>
+                    }
+                  </div>
+                </div>
+
+                <button type="button" (click)="toggleCoursePreview()" class="btn btn-secondary btn-block">
+                  Fermer l'Aperçu
+                </button>
+              </div>
+            </div>
+          }
+        </div>
+      </div>
+    }
+
+    <!-- Tab: Gérer le Contenu (Editeur Amélioré) -->
+    @if (activeTab === 'manage') {
+      <div class="tab-content">
+        <div class="content-header">
+          <h1>Éditeur de Contenu</h1>
+          <p>Enrichissez vos cours avec du contenu multimédia (vidéos, PDF, etc.)</p>
+        </div>
+
+        @if (courses.length > 0) {
+          <div class="manage-section enhanced">
+            <!-- Left Panel: Course Selection -->
+            <aside class="courses-sidebar">
+              <div class="sidebar-header">
+                <h3>📚 Mes Cours</h3>
+                <span class="course-count">{{ courses.length }}</span>
+              </div>
+              <div class="courses-list-sidebar">
+                @for (course of courses; track course.id) {
+                  <button
+                    (click)="selectCourse(course)"
+                    [class.active]="selectedCourse?.id === course.id"
+                    class="course-sidebar-btn">
+                    <div class="course-btn-content">
+                      <span class="course-title">{{ course.title }}</span>
+                      <span class="course-meta">
+                        {{ course.contents.length }} modules
+                      </span>
+                    </div>
+                    <span class="course-category-badge" [class]="course.category">
+                      {{ course.category }}
+                    </span>
+                  </button>
+                }
+              </div>
+            </aside>
+
+            <!-- Right Panel: Content Editor -->
+            <main class="editor-main">
+              @if (selectedCourse) {
+                <!-- Edit Course Form -->
+                @if (isEditingCourse && editingCourseData) {
+                  <div class="selected-course-header card edit-mode">
+                    <div class="course-header-info">
+                      <h2>Modifier le Cours</h2>
+                      <form class="edit-course-form">
+                        <!-- Titre -->
+                        <div class="form-group">
+                          <label for="edit-course-title">
+                            <span class="label-text">Titre du Cours</span>
+                            <span class="required">*</span>
+                          </label>
+                          <input
+                            type="text"
+                            id="edit-course-title"
+                            [(ngModel)]="editingCourseData.title"
+                            name="editTitle"
+                            class="form-input"
+                            maxlength="100"
+                          />
+                          <span class="char-count">{{ editingCourseData.title.length }}/100</span>
+                        </div>
+
+                        <!-- Description -->
+                        <div class="form-group">
+                          <label for="edit-course-description">
+                            <span class="label-text">Description</span>
+                            <span class="required">*</span>
+                          </label>
+                          <textarea
+                            id="edit-course-description"
+                            [(ngModel)]="editingCourseData.description"
+                            name="editDescription"
+                            class="form-textarea"
+                            rows="4"
+                            maxlength="1000"
+                          ></textarea>
+                          <span class="char-count">{{ editingCourseData.description.length }}/1000</span>
+                        </div>
+
+                        <!-- Catégorie -->
+                        <div class="form-group">
+                          <label for="edit-course-category">
+                            <span class="label-text">Catégorie</span>
+                            <span class="required">*</span>
+                          </label>
+                          <select
+                            id="edit-course-category"
+                            [(ngModel)]="editingCourseData.category"
+                            name="editCategory"
+                            class="form-select"
+                          >
+                            @for (cat of categoryOptions; track cat.value) {
+                              <option [value]="cat.value">{{ cat.label }}</option>
+                            }
+                          </select>
+                        </div>
+
+                        <!-- Objectifs -->
+                        <div class="form-group">
+                          <label for="edit-course-objectives">
+                            <span class="label-text">Objectifs</span>
+                          </label>
+                          <textarea
+                            id="edit-course-objectives"
+                            [(ngModel)]="editingCourseData.objectives"
+                            name="editObjectives"
+                            class="form-textarea"
+                            rows="3"
+                            maxlength="500"
+                          ></textarea>
+                          <span class="char-count">{{ editingCourseData.objectives.length }}/500</span>
+                        </div>
+
+                        <!-- Niveau -->
+                        <div class="form-group">
+                          <label for="edit-course-level">
+                            <span class="label-text">Niveau</span>
+                          </label>
+                          <select
+                            id="edit-course-level"
+                            [(ngModel)]="editingCourseData.level"
+                            name="editLevel"
+                            class="form-select"
+                          >
+                            <option value="beginner">Débutant</option>
+                            <option value="intermediate">Intermédiaire</option>
+                            <option value="advanced">Avancé</option>
+                          </select>
+                        </div>
+
+                        <!-- Image -->
+                        <div class="form-group">
+                          <label for="edit-course-image">
+                            <span class="label-text">Image du Cours</span>
+                          </label>
+                          @if (editingCourseData.imagePreview) {
+                            <div class="image-preview-container">
+                              <img [src]="editingCourseData.imagePreview" alt="Course image preview" class="preview-img" />
+                              <button type="button" (click)="removeEditCourseImage()" class="remove-image-btn">
+                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                                  <line x1="18" y1="6" x2="6" y2="18"></line>
+                                  <line x1="6" y1="6" x2="18" y2="18"></line>
+                                </svg>
+                              </button>
+                            </div>
+                          }
+                          <input
+                            type="file"
+                            id="edit-course-image"
+                            accept="image/*"
+                            (change)="onEditCourseImageSelected($event)"
+                            class="file-input"
+                          />
+                          <span class="file-input-hint">PNG, JPG - Max 5MB</span>
+                        </div>
+
+                        <!-- Buttons -->
+                        <div class="form-buttons">
+                          <button
+                            type="button"
+                            (click)="saveEditedCourse()"
+                            class="btn btn-primary">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                              <path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"></path>
+                              <polyline points="17 21 17 13 7 13 7 21"></polyline>
+                              <polyline points="7 3 7 8 15 8"></polyline>
+                            </svg>
+                            Enregistrer
+                          </button>
+                          <button
+                            type="button"
+                            (click)="cancelEditingCourse()"
+                            class="btn btn-secondary">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                              <line x1="18" y1="6" x2="6" y2="18"></line>
+                              <line x1="6" y1="6" x2="18" y2="18"></line>
+                            </svg>
+                            Annuler
+                          </button>
+                        </div>
+                      </form>
+                    </div>
+                  </div>
+                } @else {
+                  <!-- Course Header (Non-Edit Mode) -->
+                  <div class="selected-course-header card">
+                    <div class="course-header-info">
+                      <div class="header-title-section">
+                        <h2>{{ selectedCourse.title }}</h2>
+                        <button
+                          (click)="startEditingCourse()"
+                          class="btn btn-secondary btn-small"
+                          title="Modifier les propriétés du cours">
+                          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                            <path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z"></path>
+                          </svg>
+                          Modifier
+                        </button>
+                      </div>
+                      <p class="course-header-desc">{{ selectedCourse.description }}</p>
+                      <div class="course-header-stats">
+                        <div class="stat">
+                          <span class="stat-label">Modules</span>
+                          <span class="stat-value">{{ selectedCourse.contents.length }}</span>
+                        </div>
+                        <div class="stat">
+                          <span class="stat-label">Catégorie</span>
+                          <span class="stat-value">{{ getCategoryLabel(selectedCourse.category) }}</span>
+                        </div>
+                        <div class="stat">
+                          <span class="stat-label">Créé le</span>
+                          <span class="stat-value">{{ selectedCourse.createdAt | date:'short' }}</span>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+
+                  <!-- Tabs: Add Content / View Contents -->
+                  <div class="editor-tabs">
+                    <button
+                      (click)="editorTab = 'add'"
+                      [class.active]="editorTab === 'add'"
+                    class="tab-btn">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                      <line x1="12" y1="5" x2="12" y2="19"></line>
+                      <line x1="5" y1="12" x2="19" y2="12"></line>
+                    </svg>
+                    Ajouter du Contenu
+                  </button>
+                  <button
+                    (click)="editorTab = 'view'"
+                    [class.active]="editorTab === 'view'"
+                    class="tab-btn">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                      <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path>
+                      <circle cx="12" cy="12" r="3"></circle>
+                    </svg>
+                    Voir les Modules ({{ selectedCourse.contents.length }})
+                  </button>
+                </div>
+
+                <!-- Tab: Add/Edit Content Form -->
+                @if (editorTab === 'add') {
+                  <div class="editor-content-form card">
+                    <div class="form-header">
+                      @if (isEditingContent) {
+                        <h3>✏️ Modifier le Module</h3>
+                        <p>Mettez à jour le contenu de ce module</p>
+                      } @else {
+                        <h3>Ajouter un Nouveau Module</h3>
+                        <p>Enrichissez votre cours avec un nouveau module multimédia</p>
+                      }
+                    </div>
+
+                    <form (ngSubmit)="isEditingContent ? updateContent() : addContentToCourse()" class="editor-form">
+                      <!-- Module Title -->
+                      <div class="form-group">
+                        <label for="content-title">
+                          <span class="label-icon">📝</span>
+                          Titre du Module
+                          <span class="required">*</span>
+                        </label>
+                        <input
+                          type="text"
+                          id="content-title"
+                          [(ngModel)]="newContent.title"
+                          name="contentTitle"
+                          placeholder="Ex: Introduction à l'Automatisme"
+                          maxlength="100"
+                          class="form-input"
+                        />
+                        <span class="char-count">{{ newContent.title.length }}/100</span>
+                      </div>
+
+                      <!-- Module Description with Advanced Editor -->
+                      <div class="form-group">
+                        <label for="content-description">
+                          <span class="label-icon">📄</span>
+                          Description du Module
+                          <span class="required">*</span>
+                        </label>
+                        <div class="editor-toolbar-info">
+                          <p class="editor-hint">
+                            <strong>Fonctionnalités avancées :</strong> Utilisez les en-têtes, listes à puces, tableaux, images, formules mathématiques, et mise en forme avancée
+                          </p>
+                        </div>
+                        <quill-editor
+                          [(ngModel)]="newContent.description"
+                          name="contentDescription"
+                          [modules]="quillModules"
+                          (onContentChanged)="onDescriptionChange($event)"
+                          placeholder="Décrivez le contenu, les concepts clés et les objectifs de ce module.
+
+✨ Fonctionnalités disponibles :
+📝 En-têtes et sous-titres (H1-H6)
+📋 Listes à puces et numérotées
+✅ Listes de vérification
+📊 Tableaux interactifs
+🖼️ Images redimensionnables
+🔗 Liens hypertextes
+🎨 Couleurs et surlignage
+📐 Formules mathématiques
+💻 Blocs de code
+📱 Alignement et indentation"
+                          [style]="{'min-height': '400px', 'background': 'white', 'border-radius': '8px'}"
+                          class="advanced-editor"
+                        ></quill-editor>
+
+                        <!-- Content Type Selector -->
+                        <div class="content-type-selector">
+                          <h4>Type de Contenu</h4>
+                          <div class="content-type-grid">
+                            <button type="button" class="content-type-btn"
+                              [class.active]="newContent.contentType === 'lesson'"
+                              (click)="setContentType('lesson')">
+                              <span class="type-icon">📖</span>
+                              <span class="type-label">Leçon Théorique</span>
+                            </button>
+                            <button type="button" class="content-type-btn"
+                              [class.active]="newContent.contentType === 'exercise'"
+                              (click)="setContentType('exercise')">
+                              <span class="type-icon">✏️</span>
+                              <span class="type-label">Exercice Pratique</span>
+                            </button>
+                            <button type="button" class="content-type-btn"
+                              [class.active]="newContent.contentType === 'quiz'"
+                              (click)="setContentType('quiz')">
+                              <span class="type-icon">❓</span>
+                              <span class="type-label">Quiz d'Évaluation</span>
+                            </button>
+                            <button type="button" class="content-type-btn"
+                              [class.active]="newContent.contentType === 'resource'"
+                              (click)="setContentType('resource')">
+                              <span class="type-icon">📚</span>
+                              <span class="type-label">Ressource</span>
+                            </button>
+                          </div>
+                        </div>
+
+                        <!-- Difficulty Level -->
+                        <div class="form-group">
+                          <label>
+                            <span class="label-icon">📊</span>
+                            Niveau de Difficulté
+                          </label>
+                          <div class="difficulty-selector">
+                            <button type="button" class="difficulty-btn"
+                              [class.active]="newContent.difficulty === 'beginner'"
+                              (click)="setDifficulty('beginner')">
+                              <span class="difficulty-icon">🟢</span>
+                              Débutant
+                            </button>
+                            <button type="button" class="difficulty-btn"
+                              [class.active]="newContent.difficulty === 'intermediate'"
+                              (click)="setDifficulty('intermediate')">
+                              <span class="difficulty-icon">🟡</span>
+                              Intermédiaire
+                            </button>
+                            <button type="button" class="difficulty-btn"
+                              [class.active]="newContent.difficulty === 'advanced'"
+                              (click)="setDifficulty('advanced')">
+                              <span class="difficulty-icon">🔴</span>
+                              Avancé
+                            </button>
+                          </div>
+                        </div>
+                      </div>
+
+                      <!-- Module Duration -->
+                      <div class="form-group">
+                        <label for="content-duration">
+                          <span class="label-icon">⏱️</span>
+                          Durée du Module
+                        </label>
+                        <input
+                          type="text"
+                          id="content-duration"
+                          [(ngModel)]="newContent.duration"
+                          name="duration"
+                          placeholder="Ex: 30 min, 1h 15min"
+                          class="form-input"
+                        />
+                      </div>
+
+                      <!-- Quiz Builder (shown when contentType is 'quiz') -->
+                      @if (newContent.contentType === 'quiz') {
+                        <div class="quiz-builder">
+                          <div class="quiz-builder-header">
+                            <h4>🎯 Configuration du Quiz</h4>
+                            <button
+                              type="button"
+                              class="btn btn-secondary btn-sm"
+                              (click)="toggleQuizCreation()">
+                              @if (isCreatingQuiz) {
+                                Fermer le Créateur de Quiz
+                              } @else {
+                                Ouvrir le Créateur de Quiz
+                              }
+                            </button>
+                          </div>
+
+                          @if (isCreatingQuiz) {
+                            <div class="quiz-config card">
+                              <!-- Quiz Settings -->
+                              <div class="form-group">
+                                <label>Titre du Quiz</label>
+                                <input
+                                  type="text"
+                                  [(ngModel)]="newQuiz.title"
+                                  name="quizTitle"
+                                  placeholder="Ex: Évaluation du Module 1"
+                                  class="form-input"
+                                />
+                              </div>
+
+                              <div class="form-group">
+                                <label>Description</label>
+                                <textarea
+                                  [(ngModel)]="newQuiz.description"
+                                  name="quizDescription"
+                                  placeholder="Instructions pour le quiz..."
+                                  class="form-input"
+                                  rows="3"
+                                ></textarea>
+                              </div>
+
+                              <div class="quiz-settings-grid">
+                                <div class="form-group">
+                                  <label>Score de Réussite (%)</label>
+                                  <input
+                                    type="number"
+                                    [(ngModel)]="newQuiz.passingScore"
+                                    name="passingScore"
+                                    min="0"
+                                    max="100"
+                                    class="form-input"
+                                  />
+                                </div>
+
+                                <div class="form-group">
+                                  <label>Temps Limite (minutes)</label>
+                                  <input
+                                    type="number"
+                                    [(ngModel)]="newQuiz.timeLimit"
+                                    name="timeLimit"
+                                    min="1"
+                                    class="form-input"
+                                  />
+                                </div>
+                              </div>
+
+                              <div class="quiz-options">
+                                <label class="checkbox-label">
+                                  <input
+                                    type="checkbox"
+                                    [(ngModel)]="newQuiz.allowRetake"
+                                    name="allowRetake"
+                                  />
+                                  <span>Autoriser les tentatives multiples</span>
+                                </label>
+
+                                <label class="checkbox-label">
+                                  <input
+                                    type="checkbox"
+                                    [(ngModel)]="newQuiz.showCorrectAnswers"
+                                    name="showCorrectAnswers"
+                                  />
+                                  <span>Afficher les réponses correctes après la soumission</span>
+                                </label>
+                              </div>
+
+                              <!-- Question Builder -->
+                              <div class="question-builder">
+                                <h5>➕ Ajouter une Question</h5>
+
+                                <div class="form-group">
+                                  <label>Type de Question</label>
+                                  <select
+                                    [(ngModel)]="newQuestion.type"
+                                    name="questionType"
+                                    class="form-input"
+                                  >
+                                    <option value="multiple-choice">Choix Multiple</option>
+                                    <option value="true-false">Vrai/Faux</option>
+                                    <option value="short-answer">Réponse Courte</option>
+                                  </select>
+                                </div>
+
+                                <div class="form-group">
+                                  <label>Question</label>
+                                  <textarea
+                                    [(ngModel)]="newQuestion.question"
+                                    name="question"
+                                    placeholder="Entrez la question..."
+                                    class="form-input"
+                                    rows="2"
+                                  ></textarea>
+                                </div>
+
+                                <!-- Multiple Choice Options -->
+                                @if (newQuestion.type === 'multiple-choice') {
+                                  <div class="options-list">
+                                    <label>Options de Réponse</label>
+                                    @for (option of newQuestion.options; track $index; let i = $index) {
+                                      <div class="option-item">
+                                        <input
+                                          type="text"
+                                          [(ngModel)]="newQuestion.options![i]"
+                                          [name]="'option' + i"
+                                          placeholder="Option {{i + 1}}"
+                                          class="form-input"
+                                        />
+                                        <button
+                                          type="button"
+                                          (click)="removeOptionFromQuestion(i)"
+                                          class="remove-option-btn"
+                                          [disabled]="newQuestion.options!.length <= 2"
+                                        >
+                                          ✕
+                                        </button>
+                                      </div>
+                                    }
+                                    <button
+                                      type="button"
+                                      (click)="addOptionToQuestion()"
+                                      class="btn btn-secondary btn-sm"
+                                    >
+                                      + Ajouter une Option
+                                    </button>
+                                  </div>
+
+                                  <div class="form-group">
+                                    <label>Réponse Correcte</label>
+                                    <select
+                                      [(ngModel)]="newQuestion.correctAnswer"
+                                      name="correctAnswer"
+                                      class="form-input"
+                                    >
+                                      <option value="">Sélectionnez la bonne réponse</option>
+                                      @for (option of newQuestion.options; track $index; let i = $index) {
+                                        @if (option.trim()) {
+                                          <option [value]="option">{{option}}</option>
+                                        }
+                                      }
+                                    </select>
+                                  </div>
+                                }
+
+                                <!-- True/False Options -->
+                                @if (newQuestion.type === 'true-false') {
+                                  <div class="form-group">
+                                    <label>Réponse Correcte</label>
+                                    <select
+                                      [(ngModel)]="newQuestion.correctAnswer"
+                                      name="correctAnswer"
+                                      class="form-input"
+                                    >
+                                      <option value="">Sélectionnez</option>
+                                      <option value="true">Vrai</option>
+                                      <option value="false">Faux</option>
+                                    </select>
+                                  </div>
+                                }
+
+                                <!-- Short Answer -->
+                                @if (newQuestion.type === 'short-answer') {
+                                  <div class="form-group">
+                                    <label>Réponse Correcte</label>
+                                    <input
+                                      type="text"
+                                      [(ngModel)]="newQuestion.correctAnswer"
+                                      name="correctAnswer"
+                                      placeholder="Entrez la réponse attendue"
+                                      class="form-input"
+                                    />
+                                  </div>
+                                }
+
+                                <div class="form-row">
+                                  <div class="form-group">
+                                    <label>Points</label>
+                                    <input
+                                      type="number"
+                                      [(ngModel)]="newQuestion.points"
+                                      name="points"
+                                      min="1"
+                                      class="form-input"
+                                    />
+                                  </div>
+
+                                  <div class="form-group">
+                                    <label>Explication (optionnelle)</label>
+                                    <textarea
+                                      [(ngModel)]="newQuestion.explanation"
+                                      name="explanation"
+                                      placeholder="Expliquez pourquoi c'est la bonne réponse..."
+                                      class="form-input"
+                                      rows="2"
+                                    ></textarea>
+                                  </div>
+                                </div>
+
+                                <button
+                                  type="button"
+                                  (click)="addQuestionToQuiz()"
+                                  class="btn btn-primary"
+                                >
+                                  ➕ Ajouter la Question
+                                </button>
+                              </div>
+
+                              <!-- Questions List -->
+                              @if (newQuiz.questions.length > 0) {
+                                <div class="questions-list">
+                                  <h5>📝 Questions du Quiz ({{newQuiz.questions.length}})</h5>
+                                  @for (question of newQuiz.questions; track question.id; let i = $index) {
+                                    <div class="question-card">
+                                      <div class="question-header">
+                                        <span class="question-number">Q{{i + 1}}</span>
+                                        <span class="question-type-badge">{{question.type}}</span>
+                                        <span class="question-points">{{question.points}} pts</span>
+                                        <button
+                                          type="button"
+                                          (click)="removeQuestionFromQuiz(i)"
+                                          class="remove-btn"
+                                        >
+                                          🗑️
+                                        </button>
+                                      </div>
+                                      <p class="question-text">{{question.question}}</p>
+                                      @if (question.options) {
+                                        <ul class="question-options">
+                                          @for (opt of question.options; track $index) {
+                                            <li [class.correct]="opt === question.correctAnswer">
+                                              {{opt}}
+                                              @if (opt === question.correctAnswer) {
+                                                <span class="correct-indicator">✓</span>
+                                              }
+                                            </li>
+                                          }
+                                        </ul>
+                                      } @else {
+                                        <p class="correct-answer">
+                                          <strong>Réponse:</strong> {{question.correctAnswer}}
+                                        </p>
+                                      }
+                                    </div>
+                                  }
+
+                                  <button
+                                    type="button"
+                                    (click)="saveQuizToContent()"
+                                    class="btn btn-success btn-lg"
+                                  >
+                                    💾 Finaliser le Quiz
+                                  </button>
+                                </div>
+                              }
+                            </div>
+                          }
+
+                          <!-- Quiz Summary (when quiz is created) -->
+                          @if (!isCreatingQuiz && newQuiz.questions.length > 0) {
+                            <div class="quiz-summary card">
+                              <h5>✅ Quiz Créé</h5>
+                              <p><strong>{{newQuiz.title}}</strong></p>
+                              <p>{{newQuiz.questions.length}} questions</p>
+                              <p>Score de réussite: {{newQuiz.passingScore}}%</p>
+                              <button
+                                type="button"
+                                (click)="toggleQuizCreation()"
+                                class="btn btn-secondary btn-sm"
+                              >
+                                Modifier le Quiz
+                              </button>
+                            </div>
+                          }
+                        </div>
+                      }
+
+                      <!-- Media Uploads -->
+                      <div class="media-uploads">
+                        <h4 class="section-title">📱 Ajouter des Médias</h4>
+
+                        <!-- Video Upload -->
+                        <div class="upload-group">
+                          <label for="video-upload" class="upload-label">
+                            <span class="upload-icon">🎥</span>
+                            <span class="upload-title">Vidéo de Formation</span>
+                            <span class="upload-hint">MP4, WebM - Max 500MB</span>
+                          </label>
+                          <input
+                            type="file"
+                            id="video-upload"
+                            accept="video/*"
+                            (change)="onVideoSelected($event)"
+                            class="file-input"
+                          />
+                          @if (newContent.videoPreview) {
+                            <div class="file-preview success">
+                              <svg viewBox="0 0 24 24" fill="currentColor">
+                                <path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/>
+                              </svg>
+                              <div class="preview-content">
+                                <span class="preview-name">{{ newContent.videoPreview }}</span>
+                                <span class="preview-type">Vidéo chargée</span>
+                              </div>
+                              <button type="button" (click)="removeVideoFile()" class="remove-btn">
+                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                                  <line x1="18" y1="6" x2="6" y2="18"></line>
+                                  <line x1="6" y1="6" x2="18" y2="18"></line>
+                                </svg>
+                              </button>
+                            </div>
+                          } @else {
+                            <div class="file-placeholder">
+                              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                                <polygon points="23 7 16 12 23 17 23 7"></polygon>
+                                <rect x="1" y="5" width="15" height="14" rx="2" ry="2"></rect>
+                              </svg>
+                              <span>Aucune vidéo sélectionnée</span>
+                            </div>
+                          }
+                        </div>
+
+                        <!-- PDF Upload -->
+                        <div class="upload-group">
+                          <label for="pdf-upload" class="upload-label">
+                            <span class="upload-icon">📄</span>
+                            <span class="upload-title">Document PDF</span>
+                            <span class="upload-hint">PDF - Max 50MB</span>
+                          </label>
+                          <input
+                            type="file"
+                            id="pdf-upload"
+                            accept=".pdf"
+                            (change)="onPdfSelected($event)"
+                            class="file-input"
+                          />
+                          @if (newContent.pdfPreview) {
+                            <div class="file-preview success">
+                              <svg viewBox="0 0 24 24" fill="currentColor">
+                                <path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/>
+                              </svg>
+                              <div class="preview-content">
+                                <span class="preview-name">{{ newContent.pdfPreview }}</span>
+                                <span class="preview-type">PDF chargé</span>
+                              </div>
+                              <button type="button" (click)="removePdfFile()" class="remove-btn">
+                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                                  <line x1="18" y1="6" x2="6" y2="18"></line>
+                                  <line x1="6" y1="6" x2="18" y2="18"></line>
+                                </svg>
+                              </button>
+                            </div>
+                          } @else {
+                            <div class="file-placeholder">
+                              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                                <path d="M13 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V9z"></path>
+                                <polyline points="13 2 13 9 20 9"></polyline>
+                              </svg>
+                              <span>Aucun PDF sélectionné</span>
+                            </div>
+                          }
+                        </div>
+                      </div>
+
+                      <!-- Upload Progress -->
+                      @if (Object.keys(uploadProgress).length > 0) {
+                        <div class="upload-progress-section">
+                          <h4 class="section-title">📤 Progression du Chargement</h4>
+                          @for (key of Object.keys(uploadProgress); track key) {
+                            <div class="progress-item">
+                              <div class="progress-header">
+                                <span class="progress-name">{{ key }}</span>
+                                <span class="progress-percent">{{ uploadProgress[key] | number:'1.0-0' }}%</span>
+                              </div>
+                              <div class="progress-bar-container">
+                                <div class="progress-bar" [style.width.%]="uploadProgress[key]"></div>
+                              </div>
+                            </div>
+                          }
+                        </div>
+                      }
+
+                      <!-- Form Actions -->
+                      <div class="form-actions">
+                        @if (isEditingContent) {
+                          <button type="button" class="btn btn-secondary" (click)="cancelEditingContent()">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                              <line x1="18" y1="6" x2="6" y2="18"></line>
+                              <line x1="6" y1="6" x2="18" y2="18"></line>
+                            </svg>
+                            Annuler
+                          </button>
+                          <button type="submit" class="btn btn-primary btn-lg">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                              <polyline points="20 6 9 17 4 12"></polyline>
+                            </svg>
+                            Mettre à Jour
+                          </button>
+                        } @else {
+                          <button type="reset" class="btn btn-secondary" (click)="resetContentForm()">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                              <polyline points="23 4 23 10 17 10"></polyline>
+                              <path d="M20.49 15a9 9 0 1 1-2-8.83"></path>
+                            </svg>
+                            Réinitialiser
+                          </button>
+                          <button type="submit" class="btn btn-primary btn-lg">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                              <path d="M12 5v14M5 12h14"></path>
+                            </svg>
+                            Ajouter le Module
+                          </button>
+                        }
+                      </div>
+                    </form>
+                  </div>
+                }
+
+                <!-- Tab: View Contents -->
+                @if (editorTab === 'view') {
+                  <div class="editor-contents-list">
+                    @if (selectedCourse.contents.length > 0) {
+                      <div class="contents-grid">
+                        @for (content of selectedCourse.contents; track content.id) {
+                          <div class="content-card card">
+                            <div class="content-card-header">
+                              <h4>{{ content.title }}</h4>
+                              @if (selectedCourse) {
+                                <div class="card-actions">
+                                  <button
+                                    (click)="startEditingContent(content)"
+                                    class="edit-btn"
+                                    title="Modifier ce module">
+                                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                                      <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"></path>
+                                      <path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"></path>
+                                    </svg>
+                                  </button>
+                                  <button
+                                    (click)="deleteContent(selectedCourse!.id, content.id)"
+                                    class="delete-btn"
+                                    title="Supprimer ce module">
+                                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                                      <polyline points="3 6 5 6 21 6"></polyline>
+                                      <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path>
+                                    </svg>
+                                  </button>
+                                </div>
+                              }
+                            </div>
+
+                            <div class="content-description" [innerHTML]="content.description"></div>
+
+                            <div class="content-badges">
+                              @if (content.duration) {
+                                <span class="badge duration-badge">
+                                  <span class="badge-icon">⏱️</span>
+                                  {{ content.duration }}
+                                </span>
+                              }
+                              @if (content.video_url) {
+                                <span class="badge video-badge">
+                                  <span class="badge-icon">🎥</span>
+                                  Vidéo
+                                </span>
+                              }
+                              @if (content.pdf_url) {
+                                <span class="badge pdf-badge">
+                                  <span class="badge-icon">📄</span>
+                                  PDF
+                                </span>
+                              }
+                            </div>
+
+                            @if (content.video_url || content.pdf_url) {
+                              <div class="content-links">
+                                @if (content.video_url) {
+                                  <a [href]="content.video_url" target="_blank" class="link-btn video">
+                                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                                      <polygon points="5,3 19,12 5,21 5,3"></polygon>
+                                    </svg>
+                                    Visionner la Vidéo
+                                  </a>
+                                }
+                                @if (content.pdf_url) {
+                                  <a [href]="content.pdf_url" target="_blank" class="link-btn pdf">
+                                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                                      <path d="M13 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V9z"></path>
+                                      <polyline points="13 2 13 9 20 9"></polyline>
+                                    </svg>
+                                    Ouvrir le PDF
+                                  </a>
+                                }
+                              </div>
+                            }
+                          </div>
+                        }
+                      </div>
+                    } @else {
+                      <div class="empty-contents">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                          <path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"></path>
+                          <path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"></path>
+                        </svg>
+                        <h3>Aucun module dans ce cours</h3>
+                        <p>Allez à l'onglet "Ajouter du Contenu" pour créer votre premier module</p>
+                      </div>
+                    }
+                  </div>
+                }
+                }
+              } @else {
+                <div class="no-course-selected">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                    <circle cx="12" cy="12" r="10"></circle>
+                    <path d="M12 8v4M12 16h.01"></path>
+                  </svg>
+                  <h3>Sélectionnez un cours</h3>
+                  <p>Choisissez un cours dans la liste à gauche pour commencer à ajouter du contenu</p>
+                </div>
+              }
+            </main>
+          </div>
+        } @else {
+          <div class="empty-state large">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor">
+              <path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"></path>
+              <path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"></path>
+            </svg>
+            <h2>Aucun cours disponible</h2>
+            <p>Créez d'abord un cours dans la section "Créer un Nouveau Cours"</p>
+          </div>
+        }
+      </div>
+    }
+
+  </main>
+</div>

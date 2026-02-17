@@ -1,0 +1,134 @@
+<div class="login-wrapper">
+  <div class="login-container">
+    <div class="login-card">
+      <div class="login-header">
+        <h1>SMS2I</h1>
+        <p>Plateforme de Formation</p>
+      </div>
+
+      <form (ngSubmit)="onSubmit()" class="login-form">
+        @if (errorMessage) {
+          <div class="error-message">
+            {{ errorMessage }}
+          </div>
+        }
+
+        <!-- Login type toggle -->
+        <div class="login-type-toggle">
+          <button
+            type="button"
+            class="toggle-btn"
+            [class.active]="loginType === 'email'"
+            (click)="loginType === 'matricule' && toggleLoginType()">
+            Email
+          </button>
+          <button
+            type="button"
+            class="toggle-btn"
+            [class.active]="loginType === 'matricule'"
+            (click)="loginType === 'email' && toggleLoginType()">
+            Matricule
+          </button>
+        </div>
+
+        <div class="form-group">
+          @if (loginType === 'email') {
+            <label for="identifier">Adresse Email</label>
+            <input
+              type="email"
+              id="identifier"
+              placeholder="votre.email@exemple.com"
+              [(ngModel)]="identifier"
+              name="identifier"
+              required
+            />
+          } @else {
+            <label for="identifier">Matricule</label>
+            <input
+              type="text"
+              id="identifier"
+              placeholder="Votre matricule (ex: MAT123)"
+              [(ngModel)]="identifier"
+              name="identifier"
+              required
+            />
+          }
+        </div>
+
+        <div class="form-group">
+          <label for="password">Mot de Passe</label>
+          <input
+            type="password"
+            id="password"
+            placeholder="••••••••"
+            [(ngModel)]="password"
+            name="password"
+            required
+          />
+        </div>
+
+        <div class="form-remember">
+          <label>
+            <input
+              type="checkbox"
+              [(ngModel)]="rememberMe"
+              name="rememberMe"
+            />
+            Se souvenir de moi
+          </label>
+          <a href="javascript:void(0)" class="forgot-password">Mot de passe oublié ?</a>
+        </div>
+
+        <button type="submit" class="btn btn-primary btn-login" [disabled]="isLoading">
+          @if (isLoading) {
+            <span class="spinner"></span>
+            Connexion en cours...
+          } @else {
+            Se Connecter
+          }
+        </button>
+      </form>
+
+      <div class="login-footer">
+        <p>
+          Vous n'avez pas de compte ?
+          <a routerLink="/register">Inscrivez-vous ici</a>
+        </p>
+      </div>
+    </div>
+
+    <div class="login-side">
+      <div class="login-side-content">
+        <h2>Bienvenue sur la Plateforme SMS2I</h2>
+        <p>Accédez à vos formations certifiantes en automatisme, supervision industrielle et nouvelles technologies.</p>
+
+        <div class="benefits">
+          <div class="benefit-item">
+            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <polyline points="20 6 9 17 4 12"></polyline>
+            </svg>
+            <span>Accès immédiat aux formations</span>
+          </div>
+          <div class="benefit-item">
+            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <polyline points="20 6 9 17 4 12"></polyline>
+            </svg>
+            <span>Suivi de progression personnalisé</span>
+          </div>
+          <div class="benefit-item">
+            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <polyline points="20 6 9 17 4 12"></polyline>
+            </svg>
+            <span>Certificats reconnus</span>
+          </div>
+          <div class="benefit-item">
+            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <polyline points="20 6 9 17 4 12"></polyline>
+            </svg>
+            <span>Support technique 24/7</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,655 @@
+<div class="course-container">
+
+  @if (isLoading) {
+    <div class="loading-container">
+      <div class="loading-spinner">
+        <div class="spinner"></div>
+        <span>Chargement du cours...</span>
+      </div>
+    </div>
+  }
+
+  <!-- Error State -->
+  @if (errorMessage && !course) {
+    <div class="error-container">
+      <div class="error-message">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor">
+          <circle cx="12" cy="12" r="10"></circle>
+          <line x1="12" y1="8" x2="12" y2="12"></line>
+          <line x1="12" y1="16" x2="12.01" y2="16"></line>
+        </svg>
+        <h2>Erreur</h2>
+        <p>{{ errorMessage }}</p>
+        <button (click)="goBack()" class="btn btn-primary">
+          Retour aux formations
+        </button>
+      </div>
+    </div>
+  }
+
+  <!-- Course Loaded -->
+  @if (course && !isLoading) {
+
+    <!-- Course Landing Page (Details) -->
+    @if (showDetails) {
+      <div class="course-landing">
+        <div class="course-hero">
+          <div class="container hero-content">
+            <span class="category-badge">{{ getCategoryLabel() }}</span>
+            <h1>{{ course.title }}</h1>
+            <p class="hero-description">{{ course.description }}</p>
+            <div class="hero-meta">
+              <span class="meta-item">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <circle cx="12" cy="12" r="10"></circle>
+                  <polyline points="12,6 12,12 16,14"></polyline>
+                </svg>
+                {{ course.total_duration ? (course.total_duration + ' min') : 'Durée variable' }}
+              </span>
+              <span class="meta-item">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path>
+                  <polyline points="22 4 12 14.01 9 11.01"></polyline>
+                </svg>
+                {{ course.level || 'Tous niveaux' }}
+              </span>
+            </div>
+            <button (click)="startCourse()" class="btn btn-primary btn-lg start-btn">
+              {{ isAccessGranted ? 'Commencer la formation' : 'Demander l\'accès' }}
+            </button>
+          </div>
+          <div class="hero-image" [style.background-image]="'url(' + (course.image || 'assets/images/placeholder.jpg') + ')'"></div>
+        </div>
+
+        <div class="container course-details-grid">
+          <div class="main-column">
+            <section class="detail-section">
+              <h2>À propos de ce cours</h2>
+              <p>{{ course.description }}</p>
+              @if (course.objectives) {
+                <h3>Objectifs pédagogiques</h3>
+                <p>{{ course.objectives }}</p>
+              }
+            </section>
+
+            <section class="detail-section syllabus-section">
+              <h2>Programme de la formation</h2>
+
+              @if (groupedView && contentGroups.length > 0) {
+                <!-- Grouped View by Objectif Spécifique -->
+                <div class="syllabus-list grouped">
+                  @for (group of contentGroups; track group.objectifSpecifiqueId; let gi = $index) {
+                    <div class="content-group">
+                      <div class="group-header" (click)="group.expanded = !group.expanded">
+                        <div class="group-icon">
+                          <svg [class.rotated]="group.expanded" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <polyline points="6 9 12 15 18 9"></polyline>
+                          </svg>
+                        </div>
+                        <div class="group-info">
+                          <h3>{{ group.objectifSpecifiqueTitle }}</h3>
+                          @if (group.objectifSpecifiqueDescription) {
+                            <p>{{ group.objectifSpecifiqueDescription }}</p>
+                          }
+                          <span class="module-count">{{ group.contents.length }} module(s)</span>
+                        </div>
+                      </div>
+
+                      @if (group.expanded) {
+                        <div class="group-contents">
+                          @for (module of group.contents; track module.id; let i = $index) {
+                            <div class="syllabus-item">
+                              <div class="module-number">{{ gi + 1 }}.{{ i + 1 }}</div>
+                              <div class="module-info">
+                                <h4>{{ module.title }}</h4>
+                                <p>{{ module.description }}</p>
+                                @if (module.duration) {
+                                  <span class="duration">{{ module.duration }}</span>
+                                }
+                              </div>
+                            </div>
+                          }
+                        </div>
+                      }
+                    </div>
+                  }
+                </div>
+              } @else {
+                <!-- Flat View -->
+                <div class="syllabus-list">
+                  @for (module of course.contents; track module.id; let i = $index) {
+                    <div class="syllabus-item">
+                      <div class="module-number">{{ i + 1 }}</div>
+                      <div class="module-info">
+                        <h4>{{ module.title }}</h4>
+                        <p>{{ module.description }}</p>
+                        @if (module.duration) {
+                          <span class="duration">{{ module.duration }}</span>
+                        }
+                      </div>
+                    </div>
+                  }
+                </div>
+              }
+            </section>
+          </div>
+
+          <aside class="sidebar-column">
+            <div class="info-card">
+              <h3>Informations</h3>
+              <ul class="info-list">
+                <li>
+                  <span class="label">Durée:</span>
+                  <span class="value">{{ course.total_duration ? course.total_duration + ' min' : 'Non spécifié' }}</span>
+                </li>
+                <li>
+                  <span class="label">Niveau:</span>
+                  <span class="value">{{ course.level || 'Tous niveaux' }}</span>
+                </li>
+                <li>
+                  <span class="label">Modules:</span>
+                  <span class="value">{{ course.contents.length }}</span>
+                </li>
+                 <li>
+                  <span class="label">Accès:</span>
+                  <span class="value status-badge" [class.open]="isAccessGranted">{{ isAccessGranted ? 'Ouvert' : 'Sur inscription' }}</span>
+                </li>
+              </ul>
+            </div>
+
+            <div class="instructor-card">
+              <h3>Formateur</h3>
+              <div class="instructor-profile">
+                <div class="avatar-placeholder">
+                  {{ course.instructor ? course.instructor.charAt(0) : 'F' }}
+                </div>
+                <div class="instructor-info">
+                  <h4>{{ course.instructor || 'Équipe SMS2I' }}</h4>
+                  <p>Expert Industriel</p>
+                </div>
+              </div>
+            </div>
+          </aside>
+        </div>
+      </div>
+    }
+
+    <!-- Access Denied - Not Enrolled -->
+    @if (showAccessKeyInput && !isAccessGranted && !showDetails) {
+      <div class="access-key-container">
+        <div class="access-key-modal">
+          <div class="modal-header">
+            <h2>Accès Restreint</h2>
+            <button (click)="showDetails = true; showAccessKeyInput = false" class="close-btn">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                <line x1="18" y1="6" x2="6" y2="18"></line>
+                <line x1="6" y1="6" x2="18" y2="18"></line>
+              </svg>
+            </button>
+          </div>
+
+          <div class="modal-body">
+            <div class="course-info">
+              <h3>{{ course.title }}</h3>
+              <p class="course-category">{{ getCategoryLabel() }}</p>
+              <p class="course-description">{{ course.description }}</p>
+            </div>
+
+            <div class="access-form">
+              <div class="lock-icon">
+                <svg viewBox="0 0 24 24" fill="currentColor">
+                  <path d="M12,17A2,2 0 0,0 14,15C14,13.89 13.1,13 12,13A2,2 0 0,0 10,15A2,2 0 0,0 12,17M18,8A2,2 0 0,1 20,10V20A2,2 0 0,1 18,22H6A2,2 0 0,1 4,20V10C4,8.89 4.9,8 6,8H7V6A5,5 0 0,1 12,1A5,5 0 0,1 17,6V8H18M12,3A3,3 0 0,0 9,6V8H15V6A3,3 0 0,0 12,3Z"/>
+                </svg>
+              </div>
+
+              <p class="access-message">
+                <strong>Vous n'êtes pas inscrit à ce cours.</strong><br><br>
+                Pour accéder au contenu de cette formation, vous devez être inscrit dans une classe qui inclut ce cours.<br><br>
+                Veuillez contacter votre administrateur pour obtenir l'accès.
+              </p>
+
+              <div class="form-actions">
+                <button (click)="showDetails = true; showAccessKeyInput = false" class="btn btn-primary btn-block">
+                  Retour aux détails
+                </button>
+                <button (click)="goBack()" class="btn btn-outline btn-block" style="margin-top: 0.5rem;">
+                  Voir d'autres formations
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    }
+
+    <!-- Course Content (Udemy-style Learning Interface) -->
+    @if (isAccessGranted && currentModule && !showDetails) {
+      <div class="learning-interface">
+        <!-- Dark Learning Header -->
+        <header class="learning-header">
+          <div class="header-left">
+            <button (click)="goBack()" class="header-back-btn" title="Retour aux détails">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                <path d="M15 18l-6-6 6-6"/>
+              </svg>
+            </button>
+            <div class="header-title-section">
+              <h1>{{ course.title }}</h1>
+            </div>
+          </div>
+
+          <div class="header-right">
+            <div class="progress-circle" [style.--progress]="getCourseProgress() + '%'">
+              <svg viewBox="0 0 36 36">
+                <path class="circle-bg" d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831" />
+                <path class="circle-fill" stroke-dasharray="0, 100" d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831"
+                  [attr.stroke-dasharray]="getCourseProgress() + ', 100'" />
+              </svg>
+              <span>{{ getCourseProgress() }}%</span>
+            </div>
+            <button class="share-btn" title="Partager">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M4 12v8a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-8"/><polyline points="16 6 12 2 8 6"/><line x1="12" y1="2" x2="12" y2="15"/></svg>
+            </button>
+          </div>
+        </header>
+
+        <div class="learning-body">
+          <!-- Main Content Area (Player + Tabs) -->
+          <main class="learning-stage">
+
+            <!-- Stage / Player Container -->
+            <div class="stage-container" [class.has-video]="showVideo && currentVideoUrl" [class.has-image]="showImage && currentImageUrl" [class.has-presentation]="showPresentation && currentPresentationUrl">
+              <!-- Video Player -->
+              @if (showVideo && currentVideoUrl) {
+                <div class="video-wrapper">
+                  <video [src]="currentVideoUrl" controls autoplay class="video-player" (error)="onVideoError()">
+                    Votre navigateur ne supporte pas la lecture vidéo.
+                  </video>
+                </div>
+              }
+
+              <!-- Video Error Fallback -->
+              @if (videoError) {
+                <div class="video-error-state">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" width="48" height="48">
+                    <rect x="2" y="2" width="20" height="20" rx="2.18" ry="2.18"></rect>
+                    <line x1="7" y1="2" x2="7" y2="22"></line>
+                    <line x1="17" y1="2" x2="17" y2="22"></line>
+                    <line x1="2" y1="12" x2="22" y2="12"></line>
+                    <line x1="2" y1="7" x2="7" y2="7"></line>
+                    <line x1="2" y1="17" x2="7" y2="17"></line>
+                    <line x1="17" y1="7" x2="22" y2="7"></line>
+                    <line x1="17" y1="17" x2="22" y2="17"></line>
+                  </svg>
+                  <p>La vidéo n'a pas pu être chargée.</p>
+                  <p class="video-error-hint">Format non supporté ou fichier introuvable.</p>
+                </div>
+              }
+
+              <!-- PDF Viewer -->
+              @if (showPdf) {
+                <div class="pdf-wrapper">
+                  @if (currentPdfUrl) {
+                    <iframe [src]="currentPdfUrl" frameborder="0" allowfullscreen></iframe>
+                  } @else {
+                    <div class="pdf-loading">
+                      <div class="spinner"></div>
+                      <span>Chargement du document...</span>
+                    </div>
+                  }
+                  <div class="pdf-toolbar">
+                    @if (rawPdfUrl) {
+                      <a [href]="rawPdfUrl" target="_blank" download class="btn-open-pdf" title="Télécharger le PDF">
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                          <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+                          <polyline points="7 10 12 15 17 10"></polyline>
+                          <line x1="12" y1="15" x2="12" y2="3"></line>
+                        </svg>
+                        Télécharger
+                      </a>
+                    }
+                    <button (click)="openPdfInNewTab()" class="btn-open-pdf" title="Ouvrir dans un nouvel onglet">
+                      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"></path>
+                        <polyline points="15 3 21 3 21 9"></polyline>
+                        <line x1="10" y1="14" x2="21" y2="3"></line>
+                      </svg>
+                      Ouvrir dans un nouvel onglet
+                    </button>
+                  </div>
+                </div>
+              }
+
+              <!-- Image Viewer -->
+              @if (showImage && currentImageUrl) {
+                <div class="image-wrapper">
+                  <img [src]="currentImageUrl" [alt]="currentModule.title" class="image-viewer" />
+                </div>
+              }
+
+              <!-- Presentation Viewer (PowerPoint) -->
+              @if (showPresentation && currentPresentationUrl) {
+                <div class="pptx-wrapper">
+                  <iframe [src]="currentPresentationUrl" frameborder="0" allowfullscreen></iframe>
+                  <div class="pptx-toolbar">
+                    <button (click)="openPresentationInNewTab()" class="btn-open-pdf" title="Ouvrir dans un nouvel onglet">
+                      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"></path>
+                        <polyline points="15 3 21 3 21 9"></polyline>
+                        <line x1="10" y1="14" x2="21" y2="3"></line>
+                      </svg>
+                      Ouvrir dans un nouvel onglet
+                    </button>
+                  </div>
+                </div>
+              }
+
+              <!-- Quiz Active -->
+              @if (isQuizActive && currentQuiz && !showVideo && !showPdf) {
+                 <div class="quiz-wrapper-embedded">
+                    <div class="quiz-header-emb">
+                      <h3>{{ currentQuiz.title }}</h3>
+                      <span class="timer-badge" *ngIf="currentQuiz.timeLimit">
+                         <svg viewBox="0 0 24 24" w="16" h="16" stroke="currentColor" fill="none"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+                         {{ getQuizTimerDisplay() }}
+                      </span>
+                    </div>
+
+                    <div class="quiz-content-emb">
+                      @for (question of currentQuiz.questions; track question.id; let i = $index) {
+                        <div class="quiz-card-emb">
+                          <h4 class="q-text"><span class="q-num">{{ i + 1 }}.</span> {{ question.question }}</h4>
+
+                          @if (question.type === 'multiple-choice' && question.options) {
+                            <div class="options-list">
+                              @for (option of question.options; track option) {
+                                <label class="option-row">
+                                  <input type="radio" [name]="'q-'+question.id" [value]="option" [checked]="isOptionSelected(question.id, option)" (change)="selectAnswer(question.id, option)">
+                                  <span class="opt-text">{{ option }}</span>
+                                </label>
+                              }
+                            </div>
+                          }
+                          @if (question.type === 'true-false') {
+                             <div class="options-list">
+                                <label class="option-row">
+                                  <input type="radio" [name]="'q-'+question.id" value="true" [checked]="isOptionSelected(question.id, 'true')" (change)="selectAnswer(question.id, 'true')">
+                                  <span class="opt-text">Vrai</span>
+                                </label>
+                                <label class="option-row">
+                                  <input type="radio" [name]="'q-'+question.id" value="false" [checked]="isOptionSelected(question.id, 'false')" (change)="selectAnswer(question.id, 'false')">
+                                  <span class="opt-text">Faux</span>
+                                </label>
+                             </div>
+                          }
+                        </div>
+                      }
+                    </div>
+
+                    <div class="quiz-footer-emb">
+                       <button (click)="submitQuiz()" [disabled]="!canSubmitQuiz()" class="btn-udemy-primary">Soumettre</button>
+                    </div>
+                 </div>
+              }
+
+              <!-- Default / Fallback Content -->
+              @if (!showVideo && !showPdf && !showImage && !showPresentation && !isQuizActive && !showQuizResults) {
+                <div class="placeholder-stage">
+                  <div class="placeholder-icon">
+                    <svg viewBox="0 0 24 24" stroke="currentColor" fill="none"><polygon points="5 3 19 12 5 21"></polygon></svg>
+                  </div>
+                  <h3>Contenu du Module</h3>
+                  <div class="stage-desc" [innerHTML]="currentModule.description"></div>
+
+                  <div class="action-buttons">
+                    @if (currentModule.video_url) { <button (click)="toggleVideo()" class="btn-ghost-light">Lancer la vidéo</button> }
+                    @if (currentModule.pdf_url) { <button (click)="togglePdf()" class="btn-ghost-light">Voir le document</button> }
+                    @if (currentModule.pptx_url) { <button (click)="togglePresentation()" class="btn-ghost-light">Voir la présentation</button> }
+                    @if (currentModule.image_url) { <button (click)="toggleImage()" class="btn-ghost-light">Voir l'image</button> }
+                    @if (currentModule.quiz) { <button (click)="startQuiz()" class="btn-ghost-light">Démarrer le Quiz</button> }
+                  </div>
+                </div>
+              }
+
+              <!-- Navigation Overlay Arrows (Desktop) -->
+              <button class="nav-arrow prev" [disabled]="currentModuleIndex === 0" (click)="previousModule()">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="15 18 9 12 15 6"></polyline></svg>
+              </button>
+              <button class="nav-arrow next" [disabled]="currentModuleIndex === course.contents.length - 1" (click)="nextModule()">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="9 18 15 12 9 6"></polyline></svg>
+              </button>
+            </div>
+
+            <!-- Content Details & Tabs -->
+            <div class="content-details">
+               <div class="content-tabs-nav">
+                 <button class="tab-link" [class.active]="activeTab === 'overview'" (click)="setActiveTab('overview')">Aperçu</button>
+                 <button class="tab-link" [class.active]="activeTab === 'qa'" (click)="setActiveTab('qa')">Questions & Réponses</button>
+                 <button class="tab-link" [class.active]="activeTab === 'notes'" (click)="setActiveTab('notes')">Notes</button>
+               </div>
+
+               <!-- Overview Tab -->
+               <div class="tab-pane" *ngIf="activeTab === 'overview'">
+                 <h2>A propos de ce module</h2>
+                 <h3>{{ currentModule.title }}</h3>
+                 <div class="module-rich-desc" [innerHTML]="currentModule.description"></div>
+
+                 <div class="module-resources" *ngIf="currentModule.pdf_url">
+                    <h4>Ressources</h4>
+                    <a (click)="togglePdf()" class="resource-link">
+                      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/><polyline points="10 9 9 9 8 9"/></svg>
+                      Document Support (PDF)
+                    </a>
+                 </div>
+               </div>
+
+               <!-- Q&A Tab -->
+               <div class="tab-pane" *ngIf="activeTab === 'qa'">
+                 <div class="qa-section">
+                   <h3>Questions & Réponses</h3>
+                   <p class="section-subtitle">Posez vos questions sur ce module. L'instructeur et les autres étudiants vous répondront.</p>
+
+                   <!-- Post Question Form -->
+                   <div class="qa-input-area">
+                      <input
+                        type="text"
+                        [(ngModel)]="newQuestion"
+                        (keypress.enter)="postQuestion()"
+                        placeholder="Posez une nouvelle question..."
+                        class="qa-input">
+                      <button (click)="postQuestion()" class="btn btn-primary" [disabled]="!newQuestion.trim()">Poser</button>
+                   </div>
+
+                   <!-- Questions List -->
+                   <div class="qa-list">
+                      @if (discussions.length === 0) {
+                        <div class="empty-state-qa">
+                          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                            <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path>
+                          </svg>
+                          <p>Aucune question pour le moment. Soyez le premier à poser une question !</p>
+                        </div>
+                      }
+
+                      @for (discussion of discussions; track discussion.id) {
+                        <div class="qa-item">
+                          <div class="qa-user-avatar">{{ discussion.userAvatar || 'U' }}</div>
+                          <div class="qa-content">
+                             <div class="qa-meta">
+                               <span class="user-name">{{ discussion.userName }}</span>
+                               <span class="separator">•</span>
+                               <span class="time">{{ getTimeAgo(discussion.timestamp) }}</span>
+                               @if (discussion.userId === currentUserId) {
+                                 <button (click)="deleteQuestion(discussion.id)" class="btn-delete" title="Supprimer">
+                                   <svg viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                                     <polyline points="3 6 5 6 21 6"></polyline>
+                                     <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path>
+                                   </svg>
+                                 </button>
+                               }
+                             </div>
+                             <p class="qa-text">{{ discussion.question }}</p>
+
+                             <!-- Replies -->
+                             @if (discussion.replies.length > 0) {
+                               <div class="replies-list">
+                                 @for (reply of discussion.replies; track reply.id) {
+                                   <div class="reply-item" [class.instructor-reply]="reply.isInstructor">
+                                     <div class="reply-avatar">{{ reply.userAvatar || 'U' }}</div>
+                                     <div class="reply-content">
+                                       <div class="reply-meta">
+                                         <span class="reply-user">{{ reply.userName }}</span>
+                                         @if (reply.isInstructor) {
+                                           <span class="instructor-badge">Instructeur</span>
+                                         }
+                                         <span class="separator">•</span>
+                                         <span class="reply-time">{{ getTimeAgo(reply.timestamp) }}</span>
+                                       </div>
+                                       <p class="reply-text">{{ reply.reply }}</p>
+                                     </div>
+                                   </div>
+                                 }
+                               </div>
+                             }
+
+                             <!-- Reply Box -->
+                             @if (!showReplyBox[discussion.id]) {
+                               <button (click)="toggleReplyBox(discussion.id)" class="qa-reply-link">
+                                 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                                   <path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"></path>
+                                 </svg>
+                                 Répondre ({{ discussion.replies.length }})
+                               </button>
+                             }
+
+                             @if (showReplyBox[discussion.id]) {
+                               <div class="reply-input-area">
+                                 <input
+                                   type="text"
+                                   [(ngModel)]="replyText[discussion.id]"
+                                   (keypress.enter)="postReply(discussion.id)"
+                                   placeholder="Écrivez votre réponse..."
+                                   class="reply-input">
+                                 <div class="reply-actions">
+                                   <button (click)="postReply(discussion.id)" class="btn btn-primary btn-sm" [disabled]="!replyText[discussion.id]?.trim()">Envoyer</button>
+                                   <button (click)="toggleReplyBox(discussion.id)" class="btn btn-outline btn-sm">Annuler</button>
+                                 </div>
+                               </div>
+                             }
+                          </div>
+                        </div>
+                      }
+                   </div>
+                 </div>
+               </div>
+
+               <!-- Notes Tab -->
+               <div class="tab-pane" *ngIf="activeTab === 'notes'">
+                 <div class="empty-state-tab">
+                   <h3>Mes Notes</h3>
+                   <p>Prenez des notes personnelles sur ce module. Elles seront sauvegardées automatiquement.</p>
+                   <textarea class="notes-textarea" placeholder="Commencez à écrire vos notes ici..."></textarea>
+                   <button class="btn-primary" style="margin-top: 1rem;">Sauvegarder la note</button>
+                 </div>
+               </div>
+            </div>
+
+          </main>
+
+          <!-- Right Sidebar: Curriculum -->
+          <aside class="learning-sidebar">
+            <div class="sidebar-top">
+              <h3>Contenu du cours</h3>
+            </div>
+
+            <div class="curriculum-list">
+              @if (groupedView && contentGroups.length > 0) {
+                <!-- Grouped view by Objectif Spécifique -->
+                @for (group of contentGroups; track group.objectifSpecifiqueId; let gi = $index) {
+                  <div class="curriculum-group">
+                    <div class="group-header-sidebar" (click)="group.expanded = !group.expanded">
+                      <svg [class.rotated]="group.expanded" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <polyline points="6 9 12 15 18 9"></polyline>
+                      </svg>
+                      <span class="group-title">{{ group.objectifSpecifiqueTitle }}</span>
+                    </div>
+
+                    @if (group.expanded) {
+                      @for (module of group.contents; track module.id; let i = $index) {
+                        <div class="curriculum-item nested"
+                             [class.active]="currentModule && currentModule.id === module.id"
+                             (click)="loadModuleById(module.id)">
+
+                          <div class="checkbox-col">
+                             <span class="check-box" [class.checked]="isModuleCompleted(module.id)">
+                               <svg *ngIf="isModuleCompleted(module.id)" viewBox="0 0 24 24" stroke="currentColor" stroke-width="3" fill="none"><polyline points="20 6 9 17 4 12"/></svg>
+                             </span>
+                          </div>
+
+                          <div class="item-details">
+                            <span class="item-title">
+                               {{ module.title }}
+                            </span>
+                            <div class="item-meta">
+                              <svg viewBox="0 0 24 24" width="12" height="12" fill="none" stroke="currentColor"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+                              {{ module.duration || '15 min' }}
+
+                              <span *ngIf="module.quiz" class="badge-quiz">Quiz</span>
+                            </div>
+                          </div>
+                        </div>
+                      }
+                    }
+                  </div>
+                }
+              } @else {
+                <!-- Flat view -->
+                @for (module of course.contents; track module.id; let i = $index) {
+                  <div class="curriculum-item"
+                       [class.active]="i === currentModuleIndex"
+                       (click)="loadModule(i)">
+
+                    <div class="checkbox-col">
+                       <span class="check-box" [class.checked]="i < currentModuleIndex">
+                         <svg *ngIf="i < currentModuleIndex" viewBox="0 0 24 24" stroke="currentColor" stroke-width="3" fill="none"><polyline points="20 6 9 17 4 12"/></svg>
+                       </span>
+                    </div>
+
+                    <div class="item-details">
+                      <span class="item-title">
+                         Module {{ i + 1 }}: {{ module.title }}
+                      </span>
+                      <div class="item-meta">
+                        <svg viewBox="0 0 24 24" width="12" height="12" fill="none" stroke="currentColor"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+                        {{ module.duration || '15 min' }}
+
+                        <span *ngIf="module.quiz" class="badge-quiz">Quiz</span>
+                      </div>
+                    </div>
+                  </div>
+                }
+              }
+            </div>
+          </aside>
+        </div>
+      </div>
+    }
+
+    <!-- Course loaded but no modules -->
+    @if (isAccessGranted && (!course.contents || course.contents.length === 0)) {
+      <div class="empty-course">
+        <div class="empty-content">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor">
+            <path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"></path>
+            <path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"></path>
+          </svg>
+          <h2>Cours Vide</h2>
+          <p>Ce cours ne contient aucun module pour le moment.</p>
+          <button (click)="goBack()" class="btn btn-primary">
+            Retour aux formations
+          </button>
+        </div>
+      </div>
+    }
+  }
+</div>
